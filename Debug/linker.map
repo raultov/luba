@@ -21,7 +21,7 @@ Archive member included because of file (symbol)
 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memset.o)
                               FreeRTOS/Source/tasks.o (memset)
 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-sprintf.o)
-                              src/main.o (sprintf)
+                              FreeRTOS/Source/tasks.o (sprintf)
 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcat.o)
                               FreeRTOS/Source/tasks.o (strcat)
 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcpy.o)
@@ -118,14 +118,13 @@ Discarded input sections
                 0x0000000000000000       0x2c src/temperatureAndHR.o
  .text.output_mode_temperatureRH
                 0x0000000000000000       0x2c src/temperatureAndHR.o
- .text.init_temperatureRH
-                0x0000000000000000       0xa0 src/temperatureAndHR.o
  .text.read_values_temperatureRH
                 0x0000000000000000      0x278 src/temperatureAndHR.o
- COMMON         0x0000000000000000       0x10 src/temperatureAndHR.o
  .text          0x0000000000000000        0x0 src/system_stm32f4xx.o
  .data          0x0000000000000000        0x0 src/system_stm32f4xx.o
  .bss           0x0000000000000000        0x0 src/system_stm32f4xx.o
+ .data.SystemCoreClock
+                0x0000000000000000        0x4 src/system_stm32f4xx.o
  .data.AHBPrescTable
                 0x0000000000000000       0x10 src/system_stm32f4xx.o
  .text.SystemCoreClockUpdate
@@ -154,9 +153,21 @@ Discarded input sections
  .text          0x0000000000000000        0x0 src/radar.o
  .data          0x0000000000000000        0x0 src/radar.o
  .bss           0x0000000000000000        0x0 src/radar.o
+ .bss.xSemaphore
+                0x0000000000000000        0x4 src/radar.o
+ .text.initRadar
+                0x0000000000000000      0x118 src/radar.o
+ .text.trigger  0x0000000000000000       0x4c src/radar.o
+ .text.getDistance
+                0x0000000000000000       0x18 src/radar.o
  .text          0x0000000000000000        0x0 src/main.o
  .data          0x0000000000000000        0x0 src/main.o
  .bss           0x0000000000000000        0x0 src/main.o
+ .text.radar_task
+                0x0000000000000000       0x50 src/main.o
+ .text.leds_task
+                0x0000000000000000       0x60 src/main.o
+ COMMON         0x0000000000000000       0x10 src/main.o
  .text          0x0000000000000000        0x0 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_wwdg.o
  .data          0x0000000000000000        0x0 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_wwdg.o
  .bss           0x0000000000000000        0x0 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_wwdg.o
@@ -426,6 +437,8 @@ Discarded input sections
                 0x0000000000000000       0x20 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_syscfg.o
  .text.SYSCFG_MemoryRemapConfig
                 0x0000000000000000       0x20 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_syscfg.o
+ .text.SYSCFG_EXTILineConfig
+                0x0000000000000000       0xb4 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_syscfg.o
  .text.SYSCFG_ETH_MediaInterfaceConfig
                 0x0000000000000000       0x20 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_syscfg.o
  .text.SYSCFG_CompensationCellCmd
@@ -730,11 +743,15 @@ Discarded input sections
                 0x0000000000000000       0x20 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
  .text.RCC_I2SCLKConfig
                 0x0000000000000000       0x20 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
+ .text.RCC_AHB1PeriphClockCmd
+                0x0000000000000000       0x5c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
  .text.RCC_AHB2PeriphClockCmd
                 0x0000000000000000       0x5c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
  .text.RCC_AHB3PeriphClockCmd
                 0x0000000000000000       0x5c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
  .text.RCC_APB1PeriphClockCmd
+                0x0000000000000000       0x5c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
+ .text.RCC_APB2PeriphClockCmd
                 0x0000000000000000       0x5c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
  .text.RCC_AHB1PeriphResetCmd
                 0x0000000000000000       0x5c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
@@ -942,6 +959,10 @@ Discarded input sections
                 0x0000000000000000       0x40 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
  .text.GPIO_ReadOutputData
                 0x0000000000000000       0x1c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
+ .text.GPIO_SetBits
+                0x0000000000000000       0x1c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
+ .text.GPIO_ResetBits
+                0x0000000000000000       0x1c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
  .text.GPIO_WriteBit
                 0x0000000000000000       0x30 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
  .text.GPIO_Write
@@ -1057,8 +1078,12 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
  .text.EXTI_DeInit
                 0x0000000000000000       0x54 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
+ .text.EXTI_Init
+                0x0000000000000000      0x158 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
  .text.EXTI_StructInit
                 0x0000000000000000       0x34 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
+ .text.EXTI_GenerateSWInterrupt
+                0x0000000000000000       0x30 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
  .text.EXTI_GetFlagStatus
                 0x0000000000000000       0x40 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
  .text.EXTI_ClearFlag
@@ -1316,6 +1341,10 @@ Discarded input sections
  .text          0x0000000000000000        0x0 libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
  .data          0x0000000000000000        0x0 libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
  .bss           0x0000000000000000        0x0 libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
+ .text.NVIC_PriorityGroupConfig
+                0x0000000000000000       0x28 libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
+ .text.NVIC_Init
+                0x0000000000000000       0xe8 libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
  .text.NVIC_SetVectorTable
                 0x0000000000000000       0x2c libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
  .text.NVIC_SystemLPConfig
@@ -1365,8 +1394,32 @@ Discarded input sections
  .text          0x0000000000000000        0x0 FreeRTOS/Source/tasks.o
  .data          0x0000000000000000        0x0 FreeRTOS/Source/tasks.o
  .bss           0x0000000000000000        0x0 FreeRTOS/Source/tasks.o
+ .bss.xDelayedTaskList1
+                0x0000000000000000       0x14 FreeRTOS/Source/tasks.o
+ .bss.xDelayedTaskList2
+                0x0000000000000000       0x14 FreeRTOS/Source/tasks.o
+ .bss.xPendingReadyList
+                0x0000000000000000       0x14 FreeRTOS/Source/tasks.o
+ .bss.xTasksWaitingTermination
+                0x0000000000000000       0x14 FreeRTOS/Source/tasks.o
+ .bss.uxTasksDeleted
+                0x0000000000000000        0x4 FreeRTOS/Source/tasks.o
+ .bss.xSuspendedTaskList
+                0x0000000000000000       0x14 FreeRTOS/Source/tasks.o
+ .bss.xIdleTaskHandle
+                0x0000000000000000        0x4 FreeRTOS/Source/tasks.o
+ .bss.uxCurrentNumberOfTasks
+                0x0000000000000000        0x4 FreeRTOS/Source/tasks.o
+ .bss.uxTopUsedPriority
+                0x0000000000000000        0x4 FreeRTOS/Source/tasks.o
+ .bss.xSchedulerRunning
+                0x0000000000000000        0x4 FreeRTOS/Source/tasks.o
+ .bss.uxTaskNumber
+                0x0000000000000000        0x4 FreeRTOS/Source/tasks.o
  .bss.pcStatsString
                 0x0000000000000000       0x34 FreeRTOS/Source/tasks.o
+ .text.xTaskGenericCreate
+                0x0000000000000000      0x1ac FreeRTOS/Source/tasks.o
  .text.vTaskDelete
                 0x0000000000000000       0xc0 FreeRTOS/Source/tasks.o
  .text.vTaskDelayUntil
@@ -1385,8 +1438,15 @@ Discarded input sections
                 0x0000000000000000       0xac FreeRTOS/Source/tasks.o
  .text.xTaskResumeFromISR
                 0x0000000000000000       0xc0 FreeRTOS/Source/tasks.o
+ .rodata        0x0000000000000000       0x74 FreeRTOS/Source/tasks.o
+ .text.vTaskStartScheduler
+                0x0000000000000000       0x7c FreeRTOS/Source/tasks.o
  .text.vTaskEndScheduler
                 0x0000000000000000       0x20 FreeRTOS/Source/tasks.o
+ .text.vTaskSuspendAll
+                0x0000000000000000       0x24 FreeRTOS/Source/tasks.o
+ .text.xTaskResumeAll
+                0x0000000000000000      0x154 FreeRTOS/Source/tasks.o
  .text.xTaskGetTickCount
                 0x0000000000000000       0x28 FreeRTOS/Source/tasks.o
  .text.xTaskGetTickCountFromISR
@@ -1403,21 +1463,51 @@ Discarded input sections
                 0x0000000000000000       0x3c FreeRTOS/Source/tasks.o
  .text.xTaskCallApplicationTaskHook
                 0x0000000000000000       0x48 FreeRTOS/Source/tasks.o
+ .text.vTaskPlaceOnEventList
+                0x0000000000000000       0x78 FreeRTOS/Source/tasks.o
+ .text.xTaskRemoveFromEventList
+                0x0000000000000000       0xc4 FreeRTOS/Source/tasks.o
+ .text.vTaskSetTimeOutState
+                0x0000000000000000       0x30 FreeRTOS/Source/tasks.o
+ .text.xTaskCheckForTimeOut
+                0x0000000000000000       0xa4 FreeRTOS/Source/tasks.o
+ .text.vTaskMissedYield
+                0x0000000000000000       0x18 FreeRTOS/Source/tasks.o
+ .text.prvIdleTask
+                0x0000000000000000       0x24 FreeRTOS/Source/tasks.o
+ .text.prvInitialiseTCBVariables
+                0x0000000000000000       0x8c FreeRTOS/Source/tasks.o
+ .text.prvInitialiseTaskLists
+                0x0000000000000000       0xa4 FreeRTOS/Source/tasks.o
+ .text.prvCheckTasksWaitingTermination
+                0x0000000000000000       0x98 FreeRTOS/Source/tasks.o
+ .text.prvAddCurrentTaskToDelayedList
+                0x0000000000000000       0x8c FreeRTOS/Source/tasks.o
+ .text.prvAllocateTCBAndStack
+                0x0000000000000000       0x74 FreeRTOS/Source/tasks.o
  .text.prvGenerateRunTimeStatsForTasksInList
                 0x0000000000000000      0x180 FreeRTOS/Source/tasks.o
  .text.usTaskCheckFreeStackSpace
                 0x0000000000000000       0x38 FreeRTOS/Source/tasks.o
  .text.uxTaskGetStackHighWaterMark
                 0x0000000000000000       0x3c FreeRTOS/Source/tasks.o
+ .text.prvDeleteTCB
+                0x0000000000000000       0x20 FreeRTOS/Source/tasks.o
  .text.xTaskGetCurrentTaskHandle
                 0x0000000000000000       0x20 FreeRTOS/Source/tasks.o
  .text.vTaskPriorityInherit
                 0x0000000000000000       0xd8 FreeRTOS/Source/tasks.o
+ .text.vTaskPriorityDisinherit
+                0x0000000000000000       0x90 FreeRTOS/Source/tasks.o
  .text          0x0000000000000000        0x0 FreeRTOS/Source/queue.o
  .data          0x0000000000000000        0x0 FreeRTOS/Source/queue.o
  .bss           0x0000000000000000        0x0 FreeRTOS/Source/queue.o
+ .text.xQueueCreate
+                0x0000000000000000       0xd0 FreeRTOS/Source/queue.o
  .text.xQueueCreateMutex
                 0x0000000000000000       0x98 FreeRTOS/Source/queue.o
+ .text.xQueueGenericSend
+                0x0000000000000000      0x124 FreeRTOS/Source/queue.o
  .text.xQueueGenericSendFromISR
                 0x0000000000000000       0x90 FreeRTOS/Source/queue.o
  .text.xQueueGenericReceive
@@ -1430,12 +1520,18 @@ Discarded input sections
                 0x0000000000000000       0x1c FreeRTOS/Source/queue.o
  .text.vQueueDelete
                 0x0000000000000000       0x20 FreeRTOS/Source/queue.o
+ .text.prvCopyDataToQueue
+                0x0000000000000000       0xc4 FreeRTOS/Source/queue.o
  .text.prvCopyDataFromQueue
                 0x0000000000000000       0x50 FreeRTOS/Source/queue.o
+ .text.prvUnlockQueue
+                0x0000000000000000       0xa0 FreeRTOS/Source/queue.o
  .text.prvIsQueueEmpty
                 0x0000000000000000       0x2c FreeRTOS/Source/queue.o
  .text.xQueueIsQueueEmptyFromISR
                 0x0000000000000000       0x24 FreeRTOS/Source/queue.o
+ .text.prvIsQueueFull
+                0x0000000000000000       0x30 FreeRTOS/Source/queue.o
  .text.xQueueIsQueueFullFromISR
                 0x0000000000000000       0x2c FreeRTOS/Source/queue.o
  .text          0x0000000000000000        0x0 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
@@ -1443,11 +1539,27 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
  .rodata.ulKernelPriority
                 0x0000000000000000        0x4 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+ .text.pxPortInitialiseStack
+                0x0000000000000000       0x68 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+ .text.vPortStartFirstTask
+                0x0000000000000000       0x14 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+ .text.xPortStartScheduler
+                0x0000000000000000       0x54 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
  .text.vPortEndScheduler
                 0x0000000000000000        0xc FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+ .text.vPortYieldFromISR
+                0x0000000000000000       0x18 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+ .text.prvSetupTimerInterrupt
+                0x0000000000000000       0x40 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
  .text          0x0000000000000000        0x0 FreeRTOS/Source/list.o
  .data          0x0000000000000000        0x0 FreeRTOS/Source/list.o
  .bss           0x0000000000000000        0x0 FreeRTOS/Source/list.o
+ .text.vListInitialise
+                0x0000000000000000       0x48 FreeRTOS/Source/list.o
+ .text.vListInitialiseItem
+                0x0000000000000000       0x1c FreeRTOS/Source/list.o
+ .text.vListInsert
+                0x0000000000000000       0x78 FreeRTOS/Source/list.o
  .text          0x0000000000000000        0x0 FreeRTOS/Source/croutine.o
  .data          0x0000000000000000        0x0 FreeRTOS/Source/croutine.o
  .bss           0x0000000000000000        0x0 FreeRTOS/Source/croutine.o
@@ -1503,10 +1615,13 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivsi3.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-malloc.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-malloc.o)
+ .text          0x0000000000000000       0x80 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memcpy.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memcpy.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memcpy.o)
+ .text          0x0000000000000000       0x94 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memset.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memset.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memset.o)
+ .text          0x0000000000000000       0x94 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-sprintf.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-sprintf.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-sprintf.o)
  .text          0x0000000000000000       0x50 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcat.o)
@@ -1515,42 +1630,71 @@ Discarded input sections
  .text          0x0000000000000000       0xbc /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcpy.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcpy.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcpy.o)
+ .text          0x0000000000000000       0x60 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strlen.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strlen.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strlen.o)
+ .text          0x0000000000000000       0x78 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strncpy.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strncpy.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strncpy.o)
+ .text          0x0000000000000000     0x147c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
+ .rodata        0x0000000000000000       0x20 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
+ .rodata.str1.4
+                0x0000000000000000       0x44 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
+ .text          0x0000000000000000      0xfd8 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-dtoa.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-dtoa.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-dtoa.o)
+ .rodata.str1.4
+                0x0000000000000000       0x14 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-dtoa.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-freer.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-freer.o)
  .text          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-impure.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-impure.o)
  .rodata        0x0000000000000000        0x4 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-impure.o)
+ .text          0x0000000000000000       0xa0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-locale.o)
+ .data          0x0000000000000000       0x7c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-locale.o)
  .bss           0x0000000000000000        0xc /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-locale.o)
+ .rodata.str1.4
+                0x0000000000000000       0x14 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-locale.o)
+ .text          0x0000000000000000       0x88 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memchr.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memchr.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memchr.o)
+ .text          0x0000000000000000      0x8ec /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mprec.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mprec.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mprec.o)
+ .rodata        0x0000000000000000      0x128 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mprec.o)
+ .text          0x0000000000000000       0x90 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-s_fpclassify.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-s_fpclassify.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-s_fpclassify.o)
+ .text          0x0000000000000000      0x1dc /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcmp.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcmp.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcmp.o)
+ .text          0x0000000000000000      0xae8 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
+ .rodata        0x0000000000000000       0x20 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
+ .rodata.str1.4
+                0x0000000000000000       0x30 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
+ .text          0x0000000000000000       0x5c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-callocr.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-callocr.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-callocr.o)
+ .text          0x0000000000000000       0xa0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memmove.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memmove.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memmove.o)
+ .text          0x0000000000000000      0x41c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-reallocr.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-reallocr.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-reallocr.o)
+ .text          0x0000000000000000      0x370 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_addsubdf3.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_addsubdf3.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_addsubdf3.o)
+ .text          0x0000000000000000      0x424 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_muldivdf3.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_muldivdf3.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_muldivdf3.o)
+ .text          0x0000000000000000      0x110 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_cmpdf2.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_cmpdf2.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_cmpdf2.o)
+ .text          0x0000000000000000       0x50 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_fixdfsi.o)
  .data          0x0000000000000000        0x0 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_fixdfsi.o)
  .bss           0x0000000000000000        0x0 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_fixdfsi.o)
 
@@ -1575,7 +1719,7 @@ Linker script and memory map
                 0x0000000008000000                g_pfnVectors
                 0x0000000008000188                . = ALIGN (0x8)
 
-.text           0x0000000008000188     0x86f8
+.text           0x0000000008000188     0x2268
                 0x0000000008000188                . = ALIGN (0x8)
  *(.text)
  .text          0x0000000008000188       0x2c /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_aeabi_uldivmod.o)
@@ -1599,447 +1743,209 @@ Linker script and memory map
                 0x0000000008000b08                free
  .text          0x0000000008000b18      0x580 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mallocr.o)
                 0x0000000008000b18                _malloc_r
- .text          0x0000000008001098       0x80 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memcpy.o)
-                0x0000000008001098                memcpy
- .text          0x0000000008001118       0x94 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memset.o)
-                0x0000000008001118                memset
- .text          0x00000000080011ac       0x94 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-sprintf.o)
-                0x00000000080011ac                _sprintf_r
-                0x00000000080011f0                sprintf
- .text          0x0000000008001240       0x60 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strlen.o)
-                0x0000000008001240                strlen
- .text          0x00000000080012a0       0x78 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strncpy.o)
-                0x00000000080012a0                strncpy
- .text          0x0000000008001318     0x147c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
-                0x0000000008001318                _svfprintf_r
- *fill*         0x0000000008002794        0x4 00
- .text          0x0000000008002798      0xfd8 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-dtoa.o)
-                0x00000000080028c4                _dtoa_r
- .text          0x0000000008003770      0x240 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-freer.o)
-                0x0000000008003770                _malloc_trim_r
-                0x0000000008003818                _free_r
- .text          0x00000000080039b0       0xa0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-locale.o)
-                0x00000000080039b0                _setlocale_r
-                0x0000000008003a0c                __locale_charset
-                0x0000000008003a18                __locale_mb_cur_max
-                0x0000000008003a24                __locale_msgcharset
-                0x0000000008003a2c                __locale_cjk_lang
-                0x0000000008003a30                _localeconv_r
-                0x0000000008003a38                setlocale
-                0x0000000008003a48                localeconv
- .text          0x0000000008003a50       0x88 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memchr.o)
-                0x0000000008003a50                memchr
- .text          0x0000000008003ad8      0x8ec /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mprec.o)
-                0x0000000008003ad8                _Balloc
-                0x0000000008003b24                _Bfree
-                0x0000000008003b38                __multadd
-                0x0000000008003bc4                __s2b
-                0x0000000008003c58                __hi0bits
-                0x0000000008003c98                __lo0bits
-                0x0000000008003cfc                __i2b
-                0x0000000008003d10                __multiply
-                0x0000000008003e38                __pow5mult
-                0x0000000008003ed4                __lshift
-                0x0000000008003f8c                __mcmp
-                0x0000000008003fc8                __mdiff
-                0x00000000080040c0                __ulp
-                0x0000000008004108                __b2d
-                0x00000000080041b4                __d2b
-                0x000000000800427c                __ratio
-                0x00000000080042ec                _mprec_log10
-                0x0000000008004320                __copybits
-                0x0000000008004368                __any_on
- .text          0x00000000080043c4       0x90 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-s_fpclassify.o)
-                0x00000000080043c4                __fpclassifyd
- .text          0x0000000008004454      0x1dc /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcmp.o)
-                0x0000000008004454                strcmp
- .text          0x0000000008004630      0xae8 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
-                0x0000000008004630                __ssprint_r
-                0x000000000800473c                _svfiprintf_r
- .text          0x0000000008005118       0x5c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-callocr.o)
-                0x0000000008005118                _calloc_r
- .text          0x0000000008005174       0xa0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memmove.o)
-                0x0000000008005174                memmove
- .text          0x0000000008005214      0x41c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-reallocr.o)
-                0x0000000008005214                _realloc_r
- .text          0x0000000008005630      0x370 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_addsubdf3.o)
-                0x0000000008005630                __aeabi_drsub
-                0x0000000008005638                __aeabi_dsub
-                0x0000000008005638                __subdf3
-                0x000000000800563c                __adddf3
-                0x000000000800563c                __aeabi_dadd
-                0x00000000080058b4                __aeabi_ui2d
-                0x00000000080058b4                __floatunsidf
-                0x00000000080058d4                __floatsidf
-                0x00000000080058d4                __aeabi_i2d
-                0x00000000080058f8                __extendsfdf2
-                0x00000000080058f8                __aeabi_f2d
-                0x0000000008005934                __aeabi_ul2d
-                0x0000000008005934                __floatundidf
-                0x0000000008005944                __floatdidf
-                0x0000000008005944                __aeabi_l2d
- .text          0x00000000080059a0      0x424 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_muldivdf3.o)
-                0x00000000080059a0                __aeabi_dmul
-                0x00000000080059a0                __muldf3
-                0x0000000008005bf4                __aeabi_ddiv
-                0x0000000008005bf4                __divdf3
- .text          0x0000000008005dc4      0x110 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_cmpdf2.o)
-                0x0000000008005dc4                __gtdf2
-                0x0000000008005dc4                __gedf2
-                0x0000000008005dcc                __ltdf2
-                0x0000000008005dcc                __ledf2
-                0x0000000008005dd4                __cmpdf2
-                0x0000000008005dd4                __eqdf2
-                0x0000000008005dd4                __nedf2
-                0x0000000008005e50                __aeabi_cdrcmple
-                0x0000000008005e60                __aeabi_cdcmple
-                0x0000000008005e60                __aeabi_cdcmpeq
-                0x0000000008005e70                __aeabi_dcmpeq
-                0x0000000008005e84                __aeabi_dcmplt
-                0x0000000008005e98                __aeabi_dcmple
-                0x0000000008005eac                __aeabi_dcmpge
-                0x0000000008005ec0                __aeabi_dcmpgt
- .text          0x0000000008005ed4       0x50 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_fixdfsi.o)
-                0x0000000008005ed4                __fixdfsi
-                0x0000000008005ed4                __aeabi_d2iz
+ .text          0x0000000008001098      0x240 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-freer.o)
+                0x0000000008001098                _malloc_trim_r
+                0x0000000008001140                _free_r
  *(.text*)
  .text.getUsTime
-                0x0000000008005f24       0x8c src/ustime.o
-                0x0000000008005f24                getUsTime
- .text.delayUs  0x0000000008005fb0       0x5c src/ustime.o
-                0x0000000008005fb0                delayUs
+                0x00000000080012d8       0x8c src/ustime.o
+                0x00000000080012d8                getUsTime
+ .text.delayUs  0x0000000008001364       0x5c src/ustime.o
+                0x0000000008001364                delayUs
  .text.initUsTimer
-                0x000000000800600c       0x70 src/ustime.o
-                0x000000000800600c                initUsTimer
- .text.rb_getc  0x000000000800607c       0x74 src/uart.o
- .text.rb_putc  0x00000000080060f0       0x70 src/uart.o
+                0x00000000080013c0       0x70 src/ustime.o
+                0x00000000080013c0                initUsTimer
+ .text.rb_getc  0x0000000008001430       0x74 src/uart.o
+ .text.rb_putc  0x00000000080014a4       0x70 src/uart.o
  .text.USART1_IRQHandler
-                0x0000000008006160       0xe4 src/uart.o
-                0x0000000008006160                USART1_IRQHandler
+                0x0000000008001514       0xe4 src/uart.o
+                0x0000000008001514                USART1_IRQHandler
+ .text.init_temperatureRH
+                0x00000000080015f8       0xa0 src/temperatureAndHR.o
+                0x00000000080015f8                init_temperatureRH
  .text.SystemInit
-                0x0000000008006244       0x94 src/system_stm32f4xx.o
-                0x0000000008006244                SystemInit
+                0x0000000008001698       0x94 src/system_stm32f4xx.o
+                0x0000000008001698                SystemInit
  .text.SetSysClock
-                0x00000000080062d8      0x188 src/system_stm32f4xx.o
- .text._sbrk_r  0x0000000008006460       0x90 src/syscalls.o
-                0x0000000008006460                _sbrk_r
+                0x000000000800172c      0x188 src/system_stm32f4xx.o
+ .text._sbrk_r  0x00000000080018b4       0x90 src/syscalls.o
+                0x00000000080018b4                _sbrk_r
  .text.__malloc_lock
-                0x00000000080064f0       0x14 src/syscalls.o
-                0x00000000080064f0                __malloc_lock
+                0x0000000008001944       0x14 src/syscalls.o
+                0x0000000008001944                __malloc_lock
  .text.__malloc_unlock
-                0x0000000008006504       0x14 src/syscalls.o
-                0x0000000008006504                __malloc_unlock
+                0x0000000008001958       0x14 src/syscalls.o
+                0x0000000008001958                __malloc_unlock
  .text.NMI_Handler
-                0x0000000008006518        0xc src/stm32f4xx_it.o
-                0x0000000008006518                NMI_Handler
+                0x000000000800196c        0xc src/stm32f4xx_it.o
+                0x000000000800196c                NMI_Handler
  .text.HardFault_Handler
-                0x0000000008006524        0x8 src/stm32f4xx_it.o
-                0x0000000008006524                HardFault_Handler
+                0x0000000008001978        0x8 src/stm32f4xx_it.o
+                0x0000000008001978                HardFault_Handler
  .text.MemManage_Handler
-                0x000000000800652c        0x8 src/stm32f4xx_it.o
-                0x000000000800652c                MemManage_Handler
+                0x0000000008001980        0x8 src/stm32f4xx_it.o
+                0x0000000008001980                MemManage_Handler
  .text.BusFault_Handler
-                0x0000000008006534        0x8 src/stm32f4xx_it.o
-                0x0000000008006534                BusFault_Handler
+                0x0000000008001988        0x8 src/stm32f4xx_it.o
+                0x0000000008001988                BusFault_Handler
  .text.UsageFault_Handler
-                0x000000000800653c        0x8 src/stm32f4xx_it.o
-                0x000000000800653c                UsageFault_Handler
+                0x0000000008001990        0x8 src/stm32f4xx_it.o
+                0x0000000008001990                UsageFault_Handler
  .text.DebugMon_Handler
-                0x0000000008006544        0xc src/stm32f4xx_it.o
-                0x0000000008006544                DebugMon_Handler
+                0x0000000008001998        0xc src/stm32f4xx_it.o
+                0x0000000008001998                DebugMon_Handler
  .text.EXTI0_IRQHandler
-                0x0000000008006550       0x2c src/stm32f4xx_it.o
-                0x0000000008006550                EXTI0_IRQHandler
+                0x00000000080019a4       0x2c src/stm32f4xx_it.o
+                0x00000000080019a4                EXTI0_IRQHandler
  .text.TIM2_IRQHandler
-                0x000000000800657c       0x40 src/stm32f4xx_it.o
-                0x000000000800657c                TIM2_IRQHandler
- .text.initRadar
-                0x00000000080065bc      0x118 src/radar.o
-                0x00000000080065bc                initRadar
- .text.trigger  0x00000000080066d4       0x4c src/radar.o
-                0x00000000080066d4                trigger
- .text.getDistance
-                0x0000000008006720       0x18 src/radar.o
-                0x0000000008006720                getDistance
+                0x00000000080019d0       0x40 src/stm32f4xx_it.o
+                0x00000000080019d0                TIM2_IRQHandler
  .text.processEchoFromISR
-                0x0000000008006738       0x90 src/radar.o
-                0x0000000008006738                processEchoFromISR
- .text.radar_task
-                0x00000000080067c8       0x50 src/main.o
- .text.leds_task
-                0x0000000008006818       0x60 src/main.o
- .text.main     0x0000000008006878      0x16c src/main.o
-                0x0000000008006878                main
+                0x0000000008001a10       0x90 src/radar.o
+                0x0000000008001a10                processEchoFromISR
+ .text.main     0x0000000008001aa0       0x28 src/main.o
+                0x0000000008001aa0                main
  .text.TIM_GetCounter
-                0x00000000080069e4       0x18 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.o
-                0x00000000080069e4                TIM_GetCounter
+                0x0000000008001ac8       0x18 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.o
+                0x0000000008001ac8                TIM_GetCounter
  .text.TIM_ClearFlag
-                0x00000000080069fc       0x24 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.o
-                0x00000000080069fc                TIM_ClearFlag
- .text.SYSCFG_EXTILineConfig
-                0x0000000008006a20       0xb4 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_syscfg.o
-                0x0000000008006a20                SYSCFG_EXTILineConfig
+                0x0000000008001ae0       0x24 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.o
+                0x0000000008001ae0                TIM_ClearFlag
  .text.RCC_GetClocksFreq
-                0x0000000008006ad4      0x1d4 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
-                0x0000000008006ad4                RCC_GetClocksFreq
- .text.RCC_AHB1PeriphClockCmd
-                0x0000000008006ca8       0x5c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
-                0x0000000008006ca8                RCC_AHB1PeriphClockCmd
- .text.RCC_APB2PeriphClockCmd
-                0x0000000008006d04       0x5c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
-                0x0000000008006d04                RCC_APB2PeriphClockCmd
+                0x0000000008001b04      0x1d4 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
+                0x0000000008001b04                RCC_GetClocksFreq
  .text.GPIO_Init
-                0x0000000008006d60      0x158 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
-                0x0000000008006d60                GPIO_Init
+                0x0000000008001cd8      0x158 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
+                0x0000000008001cd8                GPIO_Init
  .text.GPIO_ReadInputDataBit
-                0x0000000008006eb8       0x40 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
-                0x0000000008006eb8                GPIO_ReadInputDataBit
- .text.GPIO_SetBits
-                0x0000000008006ef8       0x1c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
-                0x0000000008006ef8                GPIO_SetBits
- .text.GPIO_ResetBits
-                0x0000000008006f14       0x1c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
-                0x0000000008006f14                GPIO_ResetBits
+                0x0000000008001e30       0x40 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
+                0x0000000008001e30                GPIO_ReadInputDataBit
  .text.GPIO_ToggleBits
-                0x0000000008006f30       0x24 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
-                0x0000000008006f30                GPIO_ToggleBits
- .text.EXTI_Init
-                0x0000000008006f54      0x158 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
-                0x0000000008006f54                EXTI_Init
- .text.EXTI_GenerateSWInterrupt
-                0x00000000080070ac       0x30 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
-                0x00000000080070ac                EXTI_GenerateSWInterrupt
+                0x0000000008001e70       0x24 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
+                0x0000000008001e70                GPIO_ToggleBits
  .text.EXTI_GetITStatus
-                0x00000000080070dc       0x60 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
-                0x00000000080070dc                EXTI_GetITStatus
+                0x0000000008001e94       0x60 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
+                0x0000000008001e94                EXTI_GetITStatus
  .text.EXTI_ClearITPendingBit
-                0x000000000800713c       0x20 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
-                0x000000000800713c                EXTI_ClearITPendingBit
- .text.NVIC_PriorityGroupConfig
-                0x000000000800715c       0x28 libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
-                0x000000000800715c                NVIC_PriorityGroupConfig
- .text.NVIC_Init
-                0x0000000008007184       0xe8 libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
-                0x0000000008007184                NVIC_Init
+                0x0000000008001ef4       0x20 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
+                0x0000000008001ef4                EXTI_ClearITPendingBit
  .text.Reset_Handler
-                0x000000000800726c       0x44 libraries/CMSIS/ST/STM32F4xx/Source/Templates/gcc_ride7/startup_stm32f4xx.o
-                0x000000000800726c                Reset_Handler
+                0x0000000008001f14       0x44 libraries/CMSIS/ST/STM32F4xx/Source/Templates/gcc_ride7/startup_stm32f4xx.o
+                0x0000000008001f14                Reset_Handler
  .text.Default_Handler
-                0x00000000080072b0        0x2 libraries/CMSIS/ST/STM32F4xx/Source/Templates/gcc_ride7/startup_stm32f4xx.o
-                0x00000000080072b0                RTC_Alarm_IRQHandler
-                0x00000000080072b0                HASH_RNG_IRQHandler
-                0x00000000080072b0                EXTI2_IRQHandler
-                0x00000000080072b0                TIM8_CC_IRQHandler
-                0x00000000080072b0                TIM1_CC_IRQHandler
-                0x00000000080072b0                DMA2_Stream5_IRQHandler
-                0x00000000080072b0                DMA1_Stream5_IRQHandler
-                0x00000000080072b0                PVD_IRQHandler
-                0x00000000080072b0                SDIO_IRQHandler
-                0x00000000080072b0                TAMP_STAMP_IRQHandler
-                0x00000000080072b0                CAN2_RX1_IRQHandler
-                0x00000000080072b0                EXTI3_IRQHandler
-                0x00000000080072b0                TIM8_TRG_COM_TIM14_IRQHandler
-                0x00000000080072b0                TIM1_UP_TIM10_IRQHandler
-                0x00000000080072b0                TIM8_UP_TIM13_IRQHandler
-                0x00000000080072b0                I2C3_ER_IRQHandler
-                0x00000000080072b0                I2C2_EV_IRQHandler
-                0x00000000080072b0                DMA1_Stream2_IRQHandler
-                0x00000000080072b0                CAN1_RX0_IRQHandler
-                0x00000000080072b0                FPU_IRQHandler
-                0x00000000080072b0                OTG_HS_WKUP_IRQHandler
-                0x00000000080072b0                CAN2_SCE_IRQHandler
-                0x00000000080072b0                DMA2_Stream2_IRQHandler
-                0x00000000080072b0                SPI1_IRQHandler
-                0x00000000080072b0                TIM6_DAC_IRQHandler
-                0x00000000080072b0                TIM1_BRK_TIM9_IRQHandler
-                0x00000000080072b0                DCMI_IRQHandler
-                0x00000000080072b0                CAN2_RX0_IRQHandler
-                0x00000000080072b0                DMA2_Stream3_IRQHandler
-                0x00000000080072b0                USART6_IRQHandler
-                0x00000000080072b0                USART3_IRQHandler
-                0x00000000080072b0                CRYP_IRQHandler
-                0x00000000080072b0                CAN1_RX1_IRQHandler
-                0x00000000080072b0                UART5_IRQHandler
-                0x00000000080072b0                DMA2_Stream0_IRQHandler
-                0x00000000080072b0                TIM4_IRQHandler
-                0x00000000080072b0                I2C1_EV_IRQHandler
-                0x00000000080072b0                DMA1_Stream6_IRQHandler
-                0x00000000080072b0                DMA1_Stream1_IRQHandler
-                0x00000000080072b0                UART4_IRQHandler
-                0x00000000080072b0                TIM3_IRQHandler
-                0x00000000080072b0                RCC_IRQHandler
-                0x00000000080072b0                TIM8_BRK_TIM12_IRQHandler
-                0x00000000080072b0                Default_Handler
-                0x00000000080072b0                EXTI15_10_IRQHandler
-                0x00000000080072b0                ADC_IRQHandler
-                0x00000000080072b0                DMA1_Stream7_IRQHandler
-                0x00000000080072b0                TIM7_IRQHandler
-                0x00000000080072b0                CAN2_TX_IRQHandler
-                0x00000000080072b0                TIM5_IRQHandler
-                0x00000000080072b0                DMA2_Stream7_IRQHandler
-                0x00000000080072b0                I2C3_EV_IRQHandler
-                0x00000000080072b0                EXTI9_5_IRQHandler
-                0x00000000080072b0                RTC_WKUP_IRQHandler
-                0x00000000080072b0                ETH_WKUP_IRQHandler
-                0x00000000080072b0                SPI2_IRQHandler
-                0x00000000080072b0                OTG_HS_EP1_IN_IRQHandler
-                0x00000000080072b0                DMA1_Stream0_IRQHandler
-                0x00000000080072b0                CAN1_TX_IRQHandler
-                0x00000000080072b0                EXTI4_IRQHandler
-                0x00000000080072b0                FSMC_IRQHandler
-                0x00000000080072b0                ETH_IRQHandler
-                0x00000000080072b0                OTG_HS_EP1_OUT_IRQHandler
-                0x00000000080072b0                WWDG_IRQHandler
-                0x00000000080072b0                OTG_FS_WKUP_IRQHandler
-                0x00000000080072b0                TIM1_TRG_COM_TIM11_IRQHandler
-                0x00000000080072b0                OTG_HS_IRQHandler
-                0x00000000080072b0                EXTI1_IRQHandler
-                0x00000000080072b0                USART2_IRQHandler
-                0x00000000080072b0                I2C2_ER_IRQHandler
-                0x00000000080072b0                DMA2_Stream1_IRQHandler
-                0x00000000080072b0                CAN1_SCE_IRQHandler
-                0x00000000080072b0                FLASH_IRQHandler
-                0x00000000080072b0                DMA2_Stream4_IRQHandler
-                0x00000000080072b0                OTG_FS_IRQHandler
-                0x00000000080072b0                SPI3_IRQHandler
-                0x00000000080072b0                DMA1_Stream4_IRQHandler
-                0x00000000080072b0                I2C1_ER_IRQHandler
-                0x00000000080072b0                DMA2_Stream6_IRQHandler
-                0x00000000080072b0                DMA1_Stream3_IRQHandler
- *fill*         0x00000000080072b2        0x2 00
- .text.xTaskGenericCreate
-                0x00000000080072b4      0x1ac FreeRTOS/Source/tasks.o
-                0x00000000080072b4                xTaskGenericCreate
- .text.vTaskStartScheduler
-                0x0000000008007460       0x7c FreeRTOS/Source/tasks.o
-                0x0000000008007460                vTaskStartScheduler
- .text.vTaskSuspendAll
-                0x00000000080074dc       0x24 FreeRTOS/Source/tasks.o
-                0x00000000080074dc                vTaskSuspendAll
- .text.xTaskResumeAll
-                0x0000000008007500      0x154 FreeRTOS/Source/tasks.o
-                0x0000000008007500                xTaskResumeAll
+                0x0000000008001f58        0x2 libraries/CMSIS/ST/STM32F4xx/Source/Templates/gcc_ride7/startup_stm32f4xx.o
+                0x0000000008001f58                RTC_Alarm_IRQHandler
+                0x0000000008001f58                HASH_RNG_IRQHandler
+                0x0000000008001f58                EXTI2_IRQHandler
+                0x0000000008001f58                TIM8_CC_IRQHandler
+                0x0000000008001f58                TIM1_CC_IRQHandler
+                0x0000000008001f58                DMA2_Stream5_IRQHandler
+                0x0000000008001f58                DMA1_Stream5_IRQHandler
+                0x0000000008001f58                PVD_IRQHandler
+                0x0000000008001f58                SDIO_IRQHandler
+                0x0000000008001f58                TAMP_STAMP_IRQHandler
+                0x0000000008001f58                CAN2_RX1_IRQHandler
+                0x0000000008001f58                EXTI3_IRQHandler
+                0x0000000008001f58                TIM8_TRG_COM_TIM14_IRQHandler
+                0x0000000008001f58                TIM1_UP_TIM10_IRQHandler
+                0x0000000008001f58                TIM8_UP_TIM13_IRQHandler
+                0x0000000008001f58                I2C3_ER_IRQHandler
+                0x0000000008001f58                I2C2_EV_IRQHandler
+                0x0000000008001f58                DMA1_Stream2_IRQHandler
+                0x0000000008001f58                CAN1_RX0_IRQHandler
+                0x0000000008001f58                FPU_IRQHandler
+                0x0000000008001f58                OTG_HS_WKUP_IRQHandler
+                0x0000000008001f58                CAN2_SCE_IRQHandler
+                0x0000000008001f58                DMA2_Stream2_IRQHandler
+                0x0000000008001f58                SPI1_IRQHandler
+                0x0000000008001f58                TIM6_DAC_IRQHandler
+                0x0000000008001f58                TIM1_BRK_TIM9_IRQHandler
+                0x0000000008001f58                DCMI_IRQHandler
+                0x0000000008001f58                CAN2_RX0_IRQHandler
+                0x0000000008001f58                DMA2_Stream3_IRQHandler
+                0x0000000008001f58                USART6_IRQHandler
+                0x0000000008001f58                USART3_IRQHandler
+                0x0000000008001f58                CRYP_IRQHandler
+                0x0000000008001f58                CAN1_RX1_IRQHandler
+                0x0000000008001f58                UART5_IRQHandler
+                0x0000000008001f58                DMA2_Stream0_IRQHandler
+                0x0000000008001f58                TIM4_IRQHandler
+                0x0000000008001f58                I2C1_EV_IRQHandler
+                0x0000000008001f58                DMA1_Stream6_IRQHandler
+                0x0000000008001f58                DMA1_Stream1_IRQHandler
+                0x0000000008001f58                UART4_IRQHandler
+                0x0000000008001f58                TIM3_IRQHandler
+                0x0000000008001f58                RCC_IRQHandler
+                0x0000000008001f58                TIM8_BRK_TIM12_IRQHandler
+                0x0000000008001f58                Default_Handler
+                0x0000000008001f58                EXTI15_10_IRQHandler
+                0x0000000008001f58                ADC_IRQHandler
+                0x0000000008001f58                DMA1_Stream7_IRQHandler
+                0x0000000008001f58                TIM7_IRQHandler
+                0x0000000008001f58                CAN2_TX_IRQHandler
+                0x0000000008001f58                TIM5_IRQHandler
+                0x0000000008001f58                DMA2_Stream7_IRQHandler
+                0x0000000008001f58                I2C3_EV_IRQHandler
+                0x0000000008001f58                EXTI9_5_IRQHandler
+                0x0000000008001f58                RTC_WKUP_IRQHandler
+                0x0000000008001f58                ETH_WKUP_IRQHandler
+                0x0000000008001f58                SPI2_IRQHandler
+                0x0000000008001f58                OTG_HS_EP1_IN_IRQHandler
+                0x0000000008001f58                DMA1_Stream0_IRQHandler
+                0x0000000008001f58                CAN1_TX_IRQHandler
+                0x0000000008001f58                EXTI4_IRQHandler
+                0x0000000008001f58                FSMC_IRQHandler
+                0x0000000008001f58                ETH_IRQHandler
+                0x0000000008001f58                OTG_HS_EP1_OUT_IRQHandler
+                0x0000000008001f58                WWDG_IRQHandler
+                0x0000000008001f58                OTG_FS_WKUP_IRQHandler
+                0x0000000008001f58                TIM1_TRG_COM_TIM11_IRQHandler
+                0x0000000008001f58                OTG_HS_IRQHandler
+                0x0000000008001f58                EXTI1_IRQHandler
+                0x0000000008001f58                USART2_IRQHandler
+                0x0000000008001f58                I2C2_ER_IRQHandler
+                0x0000000008001f58                DMA2_Stream1_IRQHandler
+                0x0000000008001f58                CAN1_SCE_IRQHandler
+                0x0000000008001f58                FLASH_IRQHandler
+                0x0000000008001f58                DMA2_Stream4_IRQHandler
+                0x0000000008001f58                OTG_FS_IRQHandler
+                0x0000000008001f58                SPI3_IRQHandler
+                0x0000000008001f58                DMA1_Stream4_IRQHandler
+                0x0000000008001f58                I2C1_ER_IRQHandler
+                0x0000000008001f58                DMA2_Stream6_IRQHandler
+                0x0000000008001f58                DMA1_Stream3_IRQHandler
+ *fill*         0x0000000008001f5a        0x2 00
  .text.vTaskIncrementTick
-                0x0000000008007654      0x1b8 FreeRTOS/Source/tasks.o
-                0x0000000008007654                vTaskIncrementTick
+                0x0000000008001f5c      0x1b8 FreeRTOS/Source/tasks.o
+                0x0000000008001f5c                vTaskIncrementTick
  .text.vTaskSwitchContext
-                0x000000000800780c      0x118 FreeRTOS/Source/tasks.o
-                0x000000000800780c                vTaskSwitchContext
- .text.vTaskPlaceOnEventList
-                0x0000000008007924       0x78 FreeRTOS/Source/tasks.o
-                0x0000000008007924                vTaskPlaceOnEventList
- .text.xTaskRemoveFromEventList
-                0x000000000800799c       0xc4 FreeRTOS/Source/tasks.o
-                0x000000000800799c                xTaskRemoveFromEventList
- .text.vTaskSetTimeOutState
-                0x0000000008007a60       0x30 FreeRTOS/Source/tasks.o
-                0x0000000008007a60                vTaskSetTimeOutState
- .text.xTaskCheckForTimeOut
-                0x0000000008007a90       0xa4 FreeRTOS/Source/tasks.o
-                0x0000000008007a90                xTaskCheckForTimeOut
- .text.vTaskMissedYield
-                0x0000000008007b34       0x18 FreeRTOS/Source/tasks.o
-                0x0000000008007b34                vTaskMissedYield
- .text.prvIdleTask
-                0x0000000008007b4c       0x24 FreeRTOS/Source/tasks.o
- .text.prvInitialiseTCBVariables
-                0x0000000008007b70       0x8c FreeRTOS/Source/tasks.o
- .text.prvInitialiseTaskLists
-                0x0000000008007bfc       0xa4 FreeRTOS/Source/tasks.o
- .text.prvCheckTasksWaitingTermination
-                0x0000000008007ca0       0x98 FreeRTOS/Source/tasks.o
- .text.prvAddCurrentTaskToDelayedList
-                0x0000000008007d38       0x8c FreeRTOS/Source/tasks.o
- .text.prvAllocateTCBAndStack
-                0x0000000008007dc4       0x74 FreeRTOS/Source/tasks.o
- .text.prvDeleteTCB
-                0x0000000008007e38       0x20 FreeRTOS/Source/tasks.o
- .text.vTaskPriorityDisinherit
-                0x0000000008007e58       0x90 FreeRTOS/Source/tasks.o
-                0x0000000008007e58                vTaskPriorityDisinherit
- .text.xQueueCreate
-                0x0000000008007ee8       0xd0 FreeRTOS/Source/queue.o
-                0x0000000008007ee8                xQueueCreate
- .text.xQueueGenericSend
-                0x0000000008007fb8      0x124 FreeRTOS/Source/queue.o
-                0x0000000008007fb8                xQueueGenericSend
- .text.prvCopyDataToQueue
-                0x00000000080080dc       0xc4 FreeRTOS/Source/queue.o
- .text.prvUnlockQueue
-                0x00000000080081a0       0xa0 FreeRTOS/Source/queue.o
- .text.prvIsQueueFull
-                0x0000000008008240       0x30 FreeRTOS/Source/queue.o
- .text.pxPortInitialiseStack
-                0x0000000008008270       0x68 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
-                0x0000000008008270                pxPortInitialiseStack
+                0x0000000008002114      0x118 FreeRTOS/Source/tasks.o
+                0x0000000008002114                vTaskSwitchContext
  .text.SVC_Handler
-                0x00000000080082d8       0x20 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
-                0x00000000080082d8                SVC_Handler
- .text.vPortStartFirstTask
-                0x00000000080082f8       0x14 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
-                0x00000000080082f8                vPortStartFirstTask
- .text.xPortStartScheduler
-                0x000000000800830c       0x54 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
-                0x000000000800830c                xPortStartScheduler
- .text.vPortYieldFromISR
-                0x0000000008008360       0x18 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
-                0x0000000008008360                vPortYieldFromISR
+                0x000000000800222c       0x20 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+                0x000000000800222c                SVC_Handler
  .text.vPortEnterCritical
-                0x0000000008008378       0x2c FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
-                0x0000000008008378                vPortEnterCritical
+                0x000000000800224c       0x2c FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+                0x000000000800224c                vPortEnterCritical
  .text.vPortExitCritical
-                0x00000000080083a4       0x38 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
-                0x00000000080083a4                vPortExitCritical
+                0x0000000008002278       0x38 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+                0x0000000008002278                vPortExitCritical
  .text.PendSV_Handler
-                0x00000000080083dc       0x58 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
-                0x00000000080083dc                PendSV_Handler
+                0x00000000080022b0       0x58 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+                0x00000000080022b0                PendSV_Handler
  .text.SysTick_Handler
-                0x0000000008008434       0x38 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
-                0x0000000008008434                SysTick_Handler
- .text.prvSetupTimerInterrupt
-                0x000000000800846c       0x40 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
- .text.vListInitialise
-                0x00000000080084ac       0x48 FreeRTOS/Source/list.o
-                0x00000000080084ac                vListInitialise
- .text.vListInitialiseItem
-                0x00000000080084f4       0x1c FreeRTOS/Source/list.o
-                0x00000000080084f4                vListInitialiseItem
+                0x0000000008002308       0x38 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+                0x0000000008002308                SysTick_Handler
  .text.vListInsertEnd
-                0x0000000008008510       0x54 FreeRTOS/Source/list.o
-                0x0000000008008510                vListInsertEnd
- .text.vListInsert
-                0x0000000008008564       0x78 FreeRTOS/Source/list.o
-                0x0000000008008564                vListInsert
+                0x0000000008002340       0x54 FreeRTOS/Source/list.o
+                0x0000000008002340                vListInsertEnd
  .text.vListRemove
-                0x00000000080085dc       0x54 FreeRTOS/Source/list.o
-                0x00000000080085dc                vListRemove
+                0x0000000008002394       0x54 FreeRTOS/Source/list.o
+                0x0000000008002394                vListRemove
  *(.rodata)
- .rodata        0x0000000008008630        0x8 src/main.o
- .rodata        0x0000000008008638       0x74 FreeRTOS/Source/tasks.o
- .rodata        0x00000000080086ac       0x20 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
- *fill*         0x00000000080086cc        0x4 00
- .rodata        0x00000000080086d0      0x128 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mprec.o)
-                0x00000000080086e0                __mprec_tens
-                0x00000000080087a8                __mprec_bigtens
-                0x00000000080087d0                __mprec_tinytens
- .rodata        0x00000000080087f8       0x20 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
  *(.rodata*)
  .rodata.str1.4
-                0x0000000008008818       0x42 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
-                                         0x44 (size before relaxing)
- *fill*         0x000000000800885a        0x2 00
- .rodata.str1.4
-                0x000000000800885c       0x10 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-dtoa.o)
-                                         0x14 (size before relaxing)
- .rodata.str1.4
-                0x000000000800886c        0x2 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-impure.o)
-                                          0x4 (size before relaxing)
- *fill*         0x000000000800886e        0x2 00
- .rodata.str1.4
-                0x0000000008008870        0xc /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-locale.o)
-                                         0x14 (size before relaxing)
- .rodata.str1.4
-                0x0000000000000000       0x30 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
+                0x00000000080023e8        0x4 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-impure.o)
  *(.glue_7)
  .glue_7        0x0000000000000000        0x0 linker stubs
  *(.glue_7t)
@@ -2047,46 +1953,46 @@ Linker script and memory map
  *(.eh_frame)
  *(.init)
  *(.fini)
-                0x0000000008008880                . = ALIGN (0x8)
- *fill*         0x000000000800887c        0x4 00
-                0x0000000008008880                _etext = .
+                0x00000000080023f0                . = ALIGN (0x8)
+ *fill*         0x00000000080023ec        0x4 00
+                0x00000000080023f0                _etext = .
 
-.vfp11_veneer   0x0000000008008880        0x0
+.vfp11_veneer   0x00000000080023f0        0x0
  .vfp11_veneer  0x0000000000000000        0x0 linker stubs
 
-.v4_bx          0x0000000008008880        0x0
+.v4_bx          0x00000000080023f0        0x0
  .v4_bx         0x0000000000000000        0x0 linker stubs
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
 
-.ARM            0x0000000008008880        0x8
-                0x0000000008008880                __exidx_start = .
+.ARM            0x00000000080023f0        0x8
+                0x00000000080023f0                __exidx_start = .
  *(.ARM.exidx*)
- .ARM.exidx     0x0000000008008880        0x8 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_divdi3.o)
- .ARM.exidx     0x0000000008008888        0x0 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivdi3.o)
+ .ARM.exidx     0x00000000080023f0        0x8 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_divdi3.o)
+ .ARM.exidx     0x00000000080023f8        0x0 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivdi3.o)
                                           0x8 (size before relaxing)
-                0x0000000008008888                __exidx_end = .
+                0x00000000080023f8                __exidx_end = .
 
-.preinit_array  0x0000000008008888        0x0
-                0x0000000008008888                PROVIDE (__preinit_array_start, .)
+.preinit_array  0x00000000080023f8        0x0
+                0x00000000080023f8                PROVIDE (__preinit_array_start, .)
  *(.preinit_array*)
-                0x0000000008008888                PROVIDE (__preinit_array_end, .)
+                0x00000000080023f8                PROVIDE (__preinit_array_end, .)
 
-.init_array     0x0000000008008888        0x0
-                0x0000000008008888                PROVIDE (__init_array_start, .)
+.init_array     0x00000000080023f8        0x0
+                0x00000000080023f8                PROVIDE (__init_array_start, .)
  *(SORT(.init_array.*))
  *(.init_array*)
-                0x0000000008008888                PROVIDE (__init_array_end, .)
+                0x00000000080023f8                PROVIDE (__init_array_end, .)
 
-.fini_array     0x0000000008008888        0x0
-                0x0000000008008888                PROVIDE (__fini_array_start, .)
+.fini_array     0x00000000080023f8        0x0
+                0x00000000080023f8                PROVIDE (__fini_array_start, .)
  *(.fini_array*)
  *(SORT(.fini_array.*))
-                0x0000000008008888                PROVIDE (__fini_array_end, .)
-                0x0000000008008888                _sidata = .
+                0x00000000080023f8                PROVIDE (__fini_array_end, .)
+                0x00000000080023f8                _sidata = .
 
-.data           0x0000000020000000      0x900 load address 0x0000000008008888
+.data           0x0000000020000000      0x880 load address 0x00000000080023f8
                 0x0000000020000000                . = ALIGN (0x8)
                 0x0000000020000000                _sdata = .
  *(.data)
@@ -2096,123 +2002,93 @@ Linker script and memory map
                 0x000000002000040c                __malloc_trim_threshold
  .data          0x0000000020000410      0x430 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-impure.o)
                 0x0000000020000410                _impure_ptr
- .data          0x0000000020000840       0x7c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-locale.o)
-                0x0000000020000860                __mb_cur_max
  *(.data*)
- .data.rx_buf   0x00000000200008bc       0x10 src/uart.o
- .data.tx_buf   0x00000000200008cc       0x10 src/uart.o
- .data.SystemCoreClock
-                0x00000000200008dc        0x4 src/system_stm32f4xx.o
-                0x00000000200008dc                SystemCoreClock
+ .data.rx_buf   0x0000000020000840       0x10 src/uart.o
+ .data.tx_buf   0x0000000020000850       0x10 src/uart.o
  .data.__malloc_margin
-                0x00000000200008e0        0x4 src/syscalls.o
-                0x00000000200008e0                __malloc_margin
+                0x0000000020000860        0x4 src/syscalls.o
+                0x0000000020000860                __malloc_margin
  .data.distance
-                0x00000000200008e4        0x4 src/radar.o
-                0x00000000200008e4                distance
+                0x0000000020000864        0x4 src/radar.o
+                0x0000000020000864                distance
  .data.APBAHBPrescTable
-                0x00000000200008e8       0x10 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
+                0x0000000020000868       0x10 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
  .data.xNextTaskUnblockTime
-                0x00000000200008f8        0x4 FreeRTOS/Source/tasks.o
+                0x0000000020000878        0x4 FreeRTOS/Source/tasks.o
  .data.uxCriticalNesting
-                0x00000000200008fc        0x4 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
-                0x0000000020000900                . = ALIGN (0x8)
-                0x0000000020000900                _edata = .
-                0x0000000020000900                . = ALIGN (0x8)
+                0x000000002000087c        0x4 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+                0x0000000020000880                . = ALIGN (0x8)
+                0x0000000020000880                _edata = .
+                0x0000000020000880                . = ALIGN (0x8)
 
-.bss            0x0000000020000900      0x280 load address 0x0000000008009188
-                0x0000000020000900                _sbss = .
-                0x0000000020000900                __bss_start__ = _sbss
+.bss            0x0000000020000880      0x200 load address 0x0000000008002c78
+                0x0000000020000880                _sbss = .
+                0x0000000020000880                __bss_start__ = _sbss
  *(.bss)
- .bss           0x0000000020000900       0x34 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mallocr.o)
-                0x0000000020000900                __malloc_top_pad
-                0x0000000020000904                __malloc_current_mallinfo
-                0x000000002000092c                __malloc_max_sbrked_mem
-                0x0000000020000930                __malloc_max_total_mem
+ .bss           0x0000000020000880       0x34 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mallocr.o)
+                0x0000000020000880                __malloc_top_pad
+                0x0000000020000884                __malloc_current_mallinfo
+                0x00000000200008ac                __malloc_max_sbrked_mem
+                0x00000000200008b0                __malloc_max_total_mem
  *(.bss*)
- .bss.t0.4547   0x0000000020000934        0x2 src/ustime.o
- *fill*         0x0000000020000936        0x2 00
+ .bss.t0.4547   0x00000000200008b4        0x2 src/ustime.o
+ *fill*         0x00000000200008b6        0x2 00
  .bss.tickcount.4548
-                0x0000000020000938        0x8 src/ustime.o
+                0x00000000200008b8        0x8 src/ustime.o
  .bss.__compound_literal.0
-                0x0000000020000940       0x80 src/uart.o
+                0x00000000200008c0       0x80 src/uart.o
  .bss.__compound_literal.1
-                0x00000000200009c0       0x80 src/uart.o
+                0x0000000020000940       0x80 src/uart.o
  .bss.uart_stats
-                0x0000000020000a40        0xc src/uart.o
- *fill*         0x0000000020000a4c        0x4 00
- .bss.t0        0x0000000020000a50        0x8 src/radar.o
-                0x0000000020000a50                t0
- .bss.delta     0x0000000020000a58        0x8 src/radar.o
-                0x0000000020000a58                delta
- .bss.xSemaphore
-                0x0000000020000a60        0x4 src/radar.o
-                0x0000000020000a60                xSemaphore
+                0x00000000200009c0        0xc src/uart.o
+ *fill*         0x00000000200009cc        0x4 00
+ .bss.t0        0x00000000200009d0        0x8 src/radar.o
+                0x00000000200009d0                t0
+ .bss.delta     0x00000000200009d8        0x8 src/radar.o
+                0x00000000200009d8                delta
  .bss.pxCurrentTCB
-                0x0000000020000a64        0x4 FreeRTOS/Source/tasks.o
-                0x0000000020000a64                pxCurrentTCB
+                0x00000000200009e0        0x4 FreeRTOS/Source/tasks.o
+                0x00000000200009e0                pxCurrentTCB
  .bss.pxReadyTasksLists
-                0x0000000020000a68       0x64 FreeRTOS/Source/tasks.o
- .bss.xDelayedTaskList1
-                0x0000000020000acc       0x14 FreeRTOS/Source/tasks.o
- .bss.xDelayedTaskList2
-                0x0000000020000ae0       0x14 FreeRTOS/Source/tasks.o
+                0x00000000200009e4       0x64 FreeRTOS/Source/tasks.o
  .bss.pxDelayedTaskList
-                0x0000000020000af4        0x4 FreeRTOS/Source/tasks.o
+                0x0000000020000a48        0x4 FreeRTOS/Source/tasks.o
  .bss.pxOverflowDelayedTaskList
-                0x0000000020000af8        0x4 FreeRTOS/Source/tasks.o
- .bss.xPendingReadyList
-                0x0000000020000afc       0x14 FreeRTOS/Source/tasks.o
- .bss.xTasksWaitingTermination
-                0x0000000020000b10       0x14 FreeRTOS/Source/tasks.o
- .bss.uxTasksDeleted
-                0x0000000020000b24        0x4 FreeRTOS/Source/tasks.o
- .bss.xSuspendedTaskList
-                0x0000000020000b28       0x14 FreeRTOS/Source/tasks.o
- .bss.xIdleTaskHandle
-                0x0000000020000b3c        0x4 FreeRTOS/Source/tasks.o
- .bss.uxCurrentNumberOfTasks
-                0x0000000020000b40        0x4 FreeRTOS/Source/tasks.o
+                0x0000000020000a4c        0x4 FreeRTOS/Source/tasks.o
  .bss.xTickCount
-                0x0000000020000b44        0x4 FreeRTOS/Source/tasks.o
- .bss.uxTopUsedPriority
-                0x0000000020000b48        0x4 FreeRTOS/Source/tasks.o
+                0x0000000020000a50        0x4 FreeRTOS/Source/tasks.o
  .bss.uxTopReadyPriority
-                0x0000000020000b4c        0x4 FreeRTOS/Source/tasks.o
- .bss.xSchedulerRunning
-                0x0000000020000b50        0x4 FreeRTOS/Source/tasks.o
+                0x0000000020000a54        0x4 FreeRTOS/Source/tasks.o
  .bss.uxSchedulerSuspended
-                0x0000000020000b54        0x4 FreeRTOS/Source/tasks.o
+                0x0000000020000a58        0x4 FreeRTOS/Source/tasks.o
  .bss.uxMissedTicks
-                0x0000000020000b58        0x4 FreeRTOS/Source/tasks.o
+                0x0000000020000a5c        0x4 FreeRTOS/Source/tasks.o
  .bss.xMissedYield
-                0x0000000020000b5c        0x4 FreeRTOS/Source/tasks.o
+                0x0000000020000a60        0x4 FreeRTOS/Source/tasks.o
  .bss.xNumOfOverflows
-                0x0000000020000b60        0x4 FreeRTOS/Source/tasks.o
- .bss.uxTaskNumber
-                0x0000000020000b64        0x4 FreeRTOS/Source/tasks.o
+                0x0000000020000a64        0x4 FreeRTOS/Source/tasks.o
  .bss.ulTaskSwitchedInTime
-                0x0000000020000b68        0x4 FreeRTOS/Source/tasks.o
+                0x0000000020000a68        0x4 FreeRTOS/Source/tasks.o
  *(COMMON)
- COMMON         0x0000000020000b6c        0x4 src/syscalls.o
-                0x0000000020000b6c                __brkval
- COMMON         0x0000000020000b70       0x10 src/main.o
-                0x0000000020000b70                radarHandle
-                0x0000000020000b74                GPIO_InitStructure
-                0x0000000020000b7c                ledsHandle
-                0x0000000020000b80                . = ALIGN (0x8)
-                0x0000000020000b80                _ebss = .
-                0x0000000020000b80                __bss_end__ = _ebss
+ COMMON         0x0000000020000a6c       0x10 src/temperatureAndHR.o
+                0x0000000020000a6c                GPIO_InitStructure_temperatureRH
+                0x0000000020000a74                GPIO_Pin_temperatureRH
+                0x0000000020000a78                GPIOx_temperatureRH
+ COMMON         0x0000000020000a7c        0x4 src/syscalls.o
+                0x0000000020000a7c                __brkval
+                0x0000000020000a80                . = ALIGN (0x8)
+                0x0000000020000a80                _ebss = .
+                0x0000000020000a80                __bss_end__ = _ebss
 
 ._user_heap_stack
-                0x0000000020000b80      0x400 load address 0x0000000008009408
-                0x0000000020000b80                . = ALIGN (0x8)
-                0x0000000020000b80                PROVIDE (end, .)
-                0x0000000020000b80                PROVIDE (_end, .)
-                0x0000000020000b80                . = (. + _Min_Heap_Size)
-                0x0000000020000f80                . = (. + _Min_Stack_Size)
- *fill*         0x0000000020000b80      0x400 00
-                0x0000000020000f80                . = ALIGN (0x8)
+                0x0000000020000a80      0x400 load address 0x0000000008002e78
+                0x0000000020000a80                . = ALIGN (0x8)
+                0x0000000020000a80                PROVIDE (end, .)
+                0x0000000020000a80                PROVIDE (_end, .)
+                0x0000000020000a80                . = (. + _Min_Heap_Size)
+                0x0000000020000e80                . = (. + _Min_Stack_Size)
+ *fill*         0x0000000020000a80      0x400 00
+                0x0000000020000e80                . = ALIGN (0x8)
 
 .memory_b1_text
  *(.mb1text)
@@ -2441,7 +2317,7 @@ LOAD /home/raul/sat/arm-none-eabi/lib/thumb/v7/libc.a
 END GROUP
 OUTPUT(luba3 elf32-littlearm)
 
-.debug_abbrev   0x0000000000000000     0x620a
+.debug_abbrev   0x0000000000000000     0x61ec
  .debug_abbrev  0x0000000000000000      0x15e src/ustime.o
  .debug_abbrev  0x000000000000015e      0x24b src/uart.o
  .debug_abbrev  0x00000000000003a9      0x19c src/temperatureAndHR.o
@@ -2449,78 +2325,78 @@ OUTPUT(luba3 elf32-littlearm)
  .debug_abbrev  0x0000000000000689      0x227 src/syscalls.o
  .debug_abbrev  0x00000000000008b0       0xf7 src/stm32f4xx_it.o
  .debug_abbrev  0x00000000000009a7      0x1a1 src/radar.o
- .debug_abbrev  0x0000000000000b48      0x17f src/main.o
- .debug_abbrev  0x0000000000000cc7      0x122 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_wwdg.o
- .debug_abbrev  0x0000000000000de9      0x152 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_usart.o
- .debug_abbrev  0x0000000000000f3b      0x167 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.o
- .debug_abbrev  0x00000000000010a2      0x12e libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_syscfg.o
- .debug_abbrev  0x00000000000011d0      0x164 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_spi.o
- .debug_abbrev  0x0000000000001334      0x171 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_sdio.o
- .debug_abbrev  0x00000000000014a5      0x16f libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rtc.o
- .debug_abbrev  0x0000000000001614      0x13b libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rng.o
- .debug_abbrev  0x000000000000174f      0x1bb libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
- .debug_abbrev  0x000000000000190a      0x179 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_pwr.o
- .debug_abbrev  0x0000000000001a83       0xfe libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_iwdg.o
- .debug_abbrev  0x0000000000001b81      0x161 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_i2c.o
- .debug_abbrev  0x0000000000001ce2      0x193 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_sha1.o
- .debug_abbrev  0x0000000000001e75      0x193 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_md5.o
- .debug_abbrev  0x0000000000002008      0x1a5 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash.o
- .debug_abbrev  0x00000000000021ad      0x186 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
- .debug_abbrev  0x0000000000002333      0x16a libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_fsmc.o
- .debug_abbrev  0x000000000000249d      0x16c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_flash.o
- .debug_abbrev  0x0000000000002609      0x19c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
- .debug_abbrev  0x00000000000027a5      0x152 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dma.o
- .debug_abbrev  0x00000000000028f7      0x17e libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dcmi.o
- .debug_abbrev  0x0000000000002a75       0xde libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dbgmcu.o
- .debug_abbrev  0x0000000000002b53      0x176 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dac.o
- .debug_abbrev  0x0000000000002cc9      0x161 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_tdes.o
- .debug_abbrev  0x0000000000002e2a      0x161 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_des.o
- .debug_abbrev  0x0000000000002f8b      0x1d6 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_aes.o
- .debug_abbrev  0x0000000000003161      0x184 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp.o
- .debug_abbrev  0x00000000000032e5      0x10e libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_crc.o
- .debug_abbrev  0x00000000000033f3      0x1b0 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_can.o
- .debug_abbrev  0x00000000000035a3      0x12a libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
- .debug_abbrev  0x00000000000036cd      0x161 libraries/STM32F4-Discovery/stm32f4_discovery.o
- .debug_abbrev  0x000000000000382e       0x51 FreeRTOS/Source/timers.o
- .debug_abbrev  0x000000000000387f      0x1d8 FreeRTOS/Source/tasks.o
- .debug_abbrev  0x0000000000003a57      0x13e FreeRTOS/Source/queue.o
- .debug_abbrev  0x0000000000003b95      0x14d FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
- .debug_abbrev  0x0000000000003ce2       0xb6 FreeRTOS/Source/list.o
- .debug_abbrev  0x0000000000003d98      0x19b FreeRTOS/Source/croutine.o
- .debug_abbrev  0x0000000000003f33       0x14 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_aeabi_uldivmod.o)
- .debug_abbrev  0x0000000000003f47       0x6e /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(bpabi.o)
- .debug_abbrev  0x0000000000003fb5       0x14 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_dvmd_tls.o)
- .debug_abbrev  0x0000000000003fc9      0x162 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_divdi3.o)
- .debug_abbrev  0x000000000000412b      0x153 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivdi3.o)
- .debug_abbrev  0x000000000000427e       0x14 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivsi3.o)
- .debug_abbrev  0x0000000000004292      0x196 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-malloc.o)
- .debug_abbrev  0x0000000000004428      0x233 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mallocr.o)
- .debug_abbrev  0x000000000000465b       0xa8 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memcpy.o)
- .debug_abbrev  0x0000000000004703       0xab /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memset.o)
- .debug_abbrev  0x00000000000047ae      0x1d5 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-sprintf.o)
- .debug_abbrev  0x0000000000004983       0x89 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcat.o)
- .debug_abbrev  0x0000000000004a0c       0x6f /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcpy.o)
- .debug_abbrev  0x0000000000004a7b       0x6d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strlen.o)
- .debug_abbrev  0x0000000000004ae8       0x9c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strncpy.o)
- .debug_abbrev  0x0000000000004b84      0x2f1 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
- .debug_abbrev  0x0000000000004e75      0x22b /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-dtoa.o)
- .debug_abbrev  0x00000000000050a0      0x1ea /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-freer.o)
- .debug_abbrev  0x000000000000528a      0x166 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-impure.o)
- .debug_abbrev  0x00000000000053f0      0x25e /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-locale.o)
- .debug_abbrev  0x000000000000564e       0xc6 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memchr.o)
- .debug_abbrev  0x0000000000005714      0x315 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mprec.o)
- .debug_abbrev  0x0000000000005a29       0x6c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-s_fpclassify.o)
- .debug_abbrev  0x0000000000005a95       0x86 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcmp.o)
- .debug_abbrev  0x0000000000005b1b      0x262 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
- .debug_abbrev  0x0000000000005d7d      0x1ba /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-callocr.o)
- .debug_abbrev  0x0000000000005f37       0xa8 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memmove.o)
- .debug_abbrev  0x0000000000005fdf      0x1db /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-reallocr.o)
- .debug_abbrev  0x00000000000061ba       0x14 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_addsubdf3.o)
- .debug_abbrev  0x00000000000061ce       0x14 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_muldivdf3.o)
- .debug_abbrev  0x00000000000061e2       0x14 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_cmpdf2.o)
- .debug_abbrev  0x00000000000061f6       0x14 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_fixdfsi.o)
+ .debug_abbrev  0x0000000000000b48      0x161 src/main.o
+ .debug_abbrev  0x0000000000000ca9      0x122 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_wwdg.o
+ .debug_abbrev  0x0000000000000dcb      0x152 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_usart.o
+ .debug_abbrev  0x0000000000000f1d      0x167 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.o
+ .debug_abbrev  0x0000000000001084      0x12e libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_syscfg.o
+ .debug_abbrev  0x00000000000011b2      0x164 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_spi.o
+ .debug_abbrev  0x0000000000001316      0x171 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_sdio.o
+ .debug_abbrev  0x0000000000001487      0x16f libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rtc.o
+ .debug_abbrev  0x00000000000015f6      0x13b libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rng.o
+ .debug_abbrev  0x0000000000001731      0x1bb libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
+ .debug_abbrev  0x00000000000018ec      0x179 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_pwr.o
+ .debug_abbrev  0x0000000000001a65       0xfe libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_iwdg.o
+ .debug_abbrev  0x0000000000001b63      0x161 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_i2c.o
+ .debug_abbrev  0x0000000000001cc4      0x193 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_sha1.o
+ .debug_abbrev  0x0000000000001e57      0x193 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_md5.o
+ .debug_abbrev  0x0000000000001fea      0x1a5 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash.o
+ .debug_abbrev  0x000000000000218f      0x186 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
+ .debug_abbrev  0x0000000000002315      0x16a libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_fsmc.o
+ .debug_abbrev  0x000000000000247f      0x16c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_flash.o
+ .debug_abbrev  0x00000000000025eb      0x19c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
+ .debug_abbrev  0x0000000000002787      0x152 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dma.o
+ .debug_abbrev  0x00000000000028d9      0x17e libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dcmi.o
+ .debug_abbrev  0x0000000000002a57       0xde libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dbgmcu.o
+ .debug_abbrev  0x0000000000002b35      0x176 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dac.o
+ .debug_abbrev  0x0000000000002cab      0x161 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_tdes.o
+ .debug_abbrev  0x0000000000002e0c      0x161 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_des.o
+ .debug_abbrev  0x0000000000002f6d      0x1d6 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_aes.o
+ .debug_abbrev  0x0000000000003143      0x184 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp.o
+ .debug_abbrev  0x00000000000032c7      0x10e libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_crc.o
+ .debug_abbrev  0x00000000000033d5      0x1b0 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_can.o
+ .debug_abbrev  0x0000000000003585      0x12a libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
+ .debug_abbrev  0x00000000000036af      0x161 libraries/STM32F4-Discovery/stm32f4_discovery.o
+ .debug_abbrev  0x0000000000003810       0x51 FreeRTOS/Source/timers.o
+ .debug_abbrev  0x0000000000003861      0x1d8 FreeRTOS/Source/tasks.o
+ .debug_abbrev  0x0000000000003a39      0x13e FreeRTOS/Source/queue.o
+ .debug_abbrev  0x0000000000003b77      0x14d FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+ .debug_abbrev  0x0000000000003cc4       0xb6 FreeRTOS/Source/list.o
+ .debug_abbrev  0x0000000000003d7a      0x19b FreeRTOS/Source/croutine.o
+ .debug_abbrev  0x0000000000003f15       0x14 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_aeabi_uldivmod.o)
+ .debug_abbrev  0x0000000000003f29       0x6e /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(bpabi.o)
+ .debug_abbrev  0x0000000000003f97       0x14 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_dvmd_tls.o)
+ .debug_abbrev  0x0000000000003fab      0x162 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_divdi3.o)
+ .debug_abbrev  0x000000000000410d      0x153 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivdi3.o)
+ .debug_abbrev  0x0000000000004260       0x14 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivsi3.o)
+ .debug_abbrev  0x0000000000004274      0x196 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-malloc.o)
+ .debug_abbrev  0x000000000000440a      0x233 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mallocr.o)
+ .debug_abbrev  0x000000000000463d       0xa8 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memcpy.o)
+ .debug_abbrev  0x00000000000046e5       0xab /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memset.o)
+ .debug_abbrev  0x0000000000004790      0x1d5 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-sprintf.o)
+ .debug_abbrev  0x0000000000004965       0x89 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcat.o)
+ .debug_abbrev  0x00000000000049ee       0x6f /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcpy.o)
+ .debug_abbrev  0x0000000000004a5d       0x6d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strlen.o)
+ .debug_abbrev  0x0000000000004aca       0x9c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strncpy.o)
+ .debug_abbrev  0x0000000000004b66      0x2f1 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
+ .debug_abbrev  0x0000000000004e57      0x22b /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-dtoa.o)
+ .debug_abbrev  0x0000000000005082      0x1ea /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-freer.o)
+ .debug_abbrev  0x000000000000526c      0x166 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-impure.o)
+ .debug_abbrev  0x00000000000053d2      0x25e /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-locale.o)
+ .debug_abbrev  0x0000000000005630       0xc6 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memchr.o)
+ .debug_abbrev  0x00000000000056f6      0x315 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mprec.o)
+ .debug_abbrev  0x0000000000005a0b       0x6c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-s_fpclassify.o)
+ .debug_abbrev  0x0000000000005a77       0x86 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcmp.o)
+ .debug_abbrev  0x0000000000005afd      0x262 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
+ .debug_abbrev  0x0000000000005d5f      0x1ba /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-callocr.o)
+ .debug_abbrev  0x0000000000005f19       0xa8 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memmove.o)
+ .debug_abbrev  0x0000000000005fc1      0x1db /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-reallocr.o)
+ .debug_abbrev  0x000000000000619c       0x14 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_addsubdf3.o)
+ .debug_abbrev  0x00000000000061b0       0x14 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_muldivdf3.o)
+ .debug_abbrev  0x00000000000061c4       0x14 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_cmpdf2.o)
+ .debug_abbrev  0x00000000000061d8       0x14 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_fixdfsi.o)
 
-.debug_info     0x0000000000000000    0x21aaf
+.debug_info     0x0000000000000000    0x21a6d
  .debug_info    0x0000000000000000      0x6e4 src/ustime.o
  .debug_info    0x00000000000006e4     0x13f7 src/uart.o
  .debug_info    0x0000000000001adb      0x482 src/temperatureAndHR.o
@@ -2528,78 +2404,78 @@ OUTPUT(luba3 elf32-littlearm)
  .debug_info    0x0000000000002582      0xe9e src/syscalls.o
  .debug_info    0x0000000000003420      0x482 src/stm32f4xx_it.o
  .debug_info    0x00000000000038a2      0x7de src/radar.o
- .debug_info    0x0000000000004080      0x3ec src/main.o
- .debug_info    0x000000000000446c      0x25e libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_wwdg.o
- .debug_info    0x00000000000046ca      0xa57 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_usart.o
- .debug_info    0x0000000000005121     0x1e30 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.o
- .debug_info    0x0000000000006f51      0x282 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_syscfg.o
- .debug_info    0x00000000000071d3      0xbd4 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_spi.o
- .debug_info    0x0000000000007da7      0x8ac libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_sdio.o
- .debug_info    0x0000000000008653     0x122b libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rtc.o
- .debug_info    0x000000000000987e      0x299 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rng.o
- .debug_info    0x0000000000009b17      0xd2c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
- .debug_info    0x000000000000a843      0x546 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_pwr.o
- .debug_info    0x000000000000ad89      0x213 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_iwdg.o
- .debug_info    0x000000000000af9c      0xb99 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_i2c.o
- .debug_info    0x000000000000bb35      0x552 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_sha1.o
- .debug_info    0x000000000000c087      0x4f1 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_md5.o
- .debug_info    0x000000000000c578      0x58e libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash.o
- .debug_info    0x000000000000cb06      0x641 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
- .debug_info    0x000000000000d147      0x9ad libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_fsmc.o
- .debug_info    0x000000000000daf4      0x77c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_flash.o
- .debug_info    0x000000000000e270      0x37a libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
- .debug_info    0x000000000000e5ea      0x7ab libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dma.o
- .debug_info    0x000000000000ed95      0x5a5 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dcmi.o
- .debug_info    0x000000000000f33a      0x1f7 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dbgmcu.o
- .debug_info    0x000000000000f531      0x68b libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dac.o
- .debug_info    0x000000000000fbbc      0x6e7 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_tdes.o
- .debug_info    0x00000000000102a3      0x568 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_des.o
- .debug_info    0x000000000001080b     0x116c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_aes.o
- .debug_info    0x0000000000011977      0x7a6 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp.o
- .debug_info    0x000000000001211d      0x213 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_crc.o
- .debug_info    0x0000000000012330      0xc6a libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_can.o
- .debug_info    0x0000000000012f9a      0x59c libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
- .debug_info    0x0000000000013536      0x941 libraries/STM32F4-Discovery/stm32f4_discovery.o
- .debug_info    0x0000000000013e77       0x9c FreeRTOS/Source/timers.o
- .debug_info    0x0000000000013f13     0x11ed FreeRTOS/Source/tasks.o
- .debug_info    0x0000000000015100      0x793 FreeRTOS/Source/queue.o
- .debug_info    0x0000000000015893      0x24d FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
- .debug_info    0x0000000000015ae0      0x2de FreeRTOS/Source/list.o
- .debug_info    0x0000000000015dbe      0x4ff FreeRTOS/Source/croutine.o
- .debug_info    0x00000000000162bd       0xd7 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_aeabi_uldivmod.o)
- .debug_info    0x0000000000016394       0xf0 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(bpabi.o)
- .debug_info    0x0000000000016484       0xdd /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_dvmd_tls.o)
- .debug_info    0x0000000000016561      0x697 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_divdi3.o)
- .debug_info    0x0000000000016bf8      0x652 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivdi3.o)
- .debug_info    0x000000000001724a       0xdd /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivsi3.o)
- .debug_info    0x0000000000017327      0x9a5 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-malloc.o)
- .debug_info    0x0000000000017ccc      0xd6b /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mallocr.o)
- .debug_info    0x0000000000018a37      0x12e /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memcpy.o)
- .debug_info    0x0000000000018b65      0x115 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memset.o)
- .debug_info    0x0000000000018c7a      0xa5e /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-sprintf.o)
- .debug_info    0x00000000000196d8       0xea /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcat.o)
- .debug_info    0x00000000000197c2       0xb9 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcpy.o)
- .debug_info    0x000000000001987b       0xb1 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strlen.o)
- .debug_info    0x000000000001992c      0x125 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strncpy.o)
- .debug_info    0x0000000000019a51     0x1009 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
- .debug_info    0x000000000001aa5a      0xdcf /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-dtoa.o)
- .debug_info    0x000000000001b829      0xc40 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-freer.o)
- .debug_info    0x000000000001c469      0x966 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-impure.o)
- .debug_info    0x000000000001cdcf      0xc96 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-locale.o)
- .debug_info    0x000000000001da65      0x123 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memchr.o)
- .debug_info    0x000000000001db88     0x14d9 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mprec.o)
- .debug_info    0x000000000001f061       0xd8 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-s_fpclassify.o)
- .debug_info    0x000000000001f139       0xe7 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcmp.o)
- .debug_info    0x000000000001f220      0xd97 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
- .debug_info    0x000000000001ffb7      0xa4e /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-callocr.o)
- .debug_info    0x0000000000020a05      0x12e /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memmove.o)
- .debug_info    0x0000000000020b33      0xc0c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-reallocr.o)
- .debug_info    0x000000000002173f       0xdc /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_addsubdf3.o)
- .debug_info    0x000000000002181b       0xdc /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_muldivdf3.o)
- .debug_info    0x00000000000218f7       0xdc /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_cmpdf2.o)
- .debug_info    0x00000000000219d3       0xdc /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_fixdfsi.o)
+ .debug_info    0x0000000000004080      0x3aa src/main.o
+ .debug_info    0x000000000000442a      0x25e libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_wwdg.o
+ .debug_info    0x0000000000004688      0xa57 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_usart.o
+ .debug_info    0x00000000000050df     0x1e30 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.o
+ .debug_info    0x0000000000006f0f      0x282 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_syscfg.o
+ .debug_info    0x0000000000007191      0xbd4 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_spi.o
+ .debug_info    0x0000000000007d65      0x8ac libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_sdio.o
+ .debug_info    0x0000000000008611     0x122b libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rtc.o
+ .debug_info    0x000000000000983c      0x299 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rng.o
+ .debug_info    0x0000000000009ad5      0xd2c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
+ .debug_info    0x000000000000a801      0x546 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_pwr.o
+ .debug_info    0x000000000000ad47      0x213 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_iwdg.o
+ .debug_info    0x000000000000af5a      0xb99 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_i2c.o
+ .debug_info    0x000000000000baf3      0x552 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_sha1.o
+ .debug_info    0x000000000000c045      0x4f1 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_md5.o
+ .debug_info    0x000000000000c536      0x58e libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash.o
+ .debug_info    0x000000000000cac4      0x641 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
+ .debug_info    0x000000000000d105      0x9ad libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_fsmc.o
+ .debug_info    0x000000000000dab2      0x77c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_flash.o
+ .debug_info    0x000000000000e22e      0x37a libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
+ .debug_info    0x000000000000e5a8      0x7ab libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dma.o
+ .debug_info    0x000000000000ed53      0x5a5 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dcmi.o
+ .debug_info    0x000000000000f2f8      0x1f7 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dbgmcu.o
+ .debug_info    0x000000000000f4ef      0x68b libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dac.o
+ .debug_info    0x000000000000fb7a      0x6e7 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_tdes.o
+ .debug_info    0x0000000000010261      0x568 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_des.o
+ .debug_info    0x00000000000107c9     0x116c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_aes.o
+ .debug_info    0x0000000000011935      0x7a6 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp.o
+ .debug_info    0x00000000000120db      0x213 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_crc.o
+ .debug_info    0x00000000000122ee      0xc6a libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_can.o
+ .debug_info    0x0000000000012f58      0x59c libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
+ .debug_info    0x00000000000134f4      0x941 libraries/STM32F4-Discovery/stm32f4_discovery.o
+ .debug_info    0x0000000000013e35       0x9c FreeRTOS/Source/timers.o
+ .debug_info    0x0000000000013ed1     0x11ed FreeRTOS/Source/tasks.o
+ .debug_info    0x00000000000150be      0x793 FreeRTOS/Source/queue.o
+ .debug_info    0x0000000000015851      0x24d FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+ .debug_info    0x0000000000015a9e      0x2de FreeRTOS/Source/list.o
+ .debug_info    0x0000000000015d7c      0x4ff FreeRTOS/Source/croutine.o
+ .debug_info    0x000000000001627b       0xd7 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_aeabi_uldivmod.o)
+ .debug_info    0x0000000000016352       0xf0 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(bpabi.o)
+ .debug_info    0x0000000000016442       0xdd /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_dvmd_tls.o)
+ .debug_info    0x000000000001651f      0x697 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_divdi3.o)
+ .debug_info    0x0000000000016bb6      0x652 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivdi3.o)
+ .debug_info    0x0000000000017208       0xdd /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivsi3.o)
+ .debug_info    0x00000000000172e5      0x9a5 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-malloc.o)
+ .debug_info    0x0000000000017c8a      0xd6b /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mallocr.o)
+ .debug_info    0x00000000000189f5      0x12e /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memcpy.o)
+ .debug_info    0x0000000000018b23      0x115 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memset.o)
+ .debug_info    0x0000000000018c38      0xa5e /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-sprintf.o)
+ .debug_info    0x0000000000019696       0xea /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcat.o)
+ .debug_info    0x0000000000019780       0xb9 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcpy.o)
+ .debug_info    0x0000000000019839       0xb1 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strlen.o)
+ .debug_info    0x00000000000198ea      0x125 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strncpy.o)
+ .debug_info    0x0000000000019a0f     0x1009 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
+ .debug_info    0x000000000001aa18      0xdcf /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-dtoa.o)
+ .debug_info    0x000000000001b7e7      0xc40 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-freer.o)
+ .debug_info    0x000000000001c427      0x966 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-impure.o)
+ .debug_info    0x000000000001cd8d      0xc96 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-locale.o)
+ .debug_info    0x000000000001da23      0x123 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memchr.o)
+ .debug_info    0x000000000001db46     0x14d9 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mprec.o)
+ .debug_info    0x000000000001f01f       0xd8 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-s_fpclassify.o)
+ .debug_info    0x000000000001f0f7       0xe7 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcmp.o)
+ .debug_info    0x000000000001f1de      0xd97 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
+ .debug_info    0x000000000001ff75      0xa4e /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-callocr.o)
+ .debug_info    0x00000000000209c3      0x12e /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memmove.o)
+ .debug_info    0x0000000000020af1      0xc0c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-reallocr.o)
+ .debug_info    0x00000000000216fd       0xdc /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_addsubdf3.o)
+ .debug_info    0x00000000000217d9       0xdc /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_muldivdf3.o)
+ .debug_info    0x00000000000218b5       0xdc /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_cmpdf2.o)
+ .debug_info    0x0000000000021991       0xdc /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_fixdfsi.o)
 
-.debug_line     0x0000000000000000    0x176de
+.debug_line     0x0000000000000000    0x176cf
  .debug_line    0x0000000000000000      0x60a src/ustime.o
  .debug_line    0x000000000000060a      0x7fe src/uart.o
  .debug_line    0x0000000000000e08      0x7f0 src/temperatureAndHR.o
@@ -2607,76 +2483,76 @@ OUTPUT(luba3 elf32-littlearm)
  .debug_line    0x0000000000001aae      0x714 src/syscalls.o
  .debug_line    0x00000000000021c2      0x68e src/stm32f4xx_it.o
  .debug_line    0x0000000000002850      0x7d7 src/radar.o
- .debug_line    0x0000000000003027      0x7f0 src/main.o
- .debug_line    0x0000000000003817      0x4f3 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_wwdg.o
- .debug_line    0x0000000000003d0a      0x6fb libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_usart.o
- .debug_line    0x0000000000004405      0xce5 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.o
- .debug_line    0x00000000000050ea      0x4d1 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_syscfg.o
- .debug_line    0x00000000000055bb      0x6c0 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_spi.o
- .debug_line    0x0000000000005c7b      0x6af libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_sdio.o
- .debug_line    0x000000000000632a      0xa84 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rtc.o
- .debug_line    0x0000000000006dae      0x4f4 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rng.o
- .debug_line    0x00000000000072a2      0x80c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
- .debug_line    0x0000000000007aae      0x55a libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_pwr.o
- .debug_line    0x0000000000008008      0x4c8 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_iwdg.o
- .debug_line    0x00000000000084d0      0x735 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_i2c.o
- .debug_line    0x0000000000008c05      0x5da libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_sha1.o
- .debug_line    0x00000000000091df      0x5bf libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_md5.o
- .debug_line    0x000000000000979e      0x5dc libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash.o
- .debug_line    0x0000000000009d7a      0x5aa libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
- .debug_line    0x000000000000a324      0x6cc libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_fsmc.o
- .debug_line    0x000000000000a9f0      0x6f7 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_flash.o
- .debug_line    0x000000000000b0e7      0x514 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
- .debug_line    0x000000000000b5fb      0x648 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dma.o
- .debug_line    0x000000000000bc43      0x5ab libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dcmi.o
- .debug_line    0x000000000000c1ee      0x4b8 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dbgmcu.o
- .debug_line    0x000000000000c6a6      0x5ce libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dac.o
- .debug_line    0x000000000000cc74      0x5ce libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_tdes.o
- .debug_line    0x000000000000d242      0x555 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_des.o
- .debug_line    0x000000000000d797      0x90f libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_aes.o
- .debug_line    0x000000000000e0a6      0x601 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp.o
- .debug_line    0x000000000000e6a7      0x4d5 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_crc.o
- .debug_line    0x000000000000eb7c      0x7de libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_can.o
- .debug_line    0x000000000000f35a      0x4ba libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
- .debug_line    0x000000000000f814      0x4d7 libraries/STM32F4-Discovery/stm32f4_discovery.o
- .debug_line    0x000000000000fceb      0x56e FreeRTOS/Source/timers.o
- .debug_line    0x0000000000010259      0xd43 FreeRTOS/Source/tasks.o
- .debug_line    0x0000000000010f9c      0x8ee FreeRTOS/Source/queue.o
- .debug_line    0x000000000001188a      0x647 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
- .debug_line    0x0000000000011ed1      0x716 FreeRTOS/Source/list.o
- .debug_line    0x00000000000125e7      0x6a7 FreeRTOS/Source/croutine.o
- .debug_line    0x0000000000012c8e       0x81 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_aeabi_uldivmod.o)
- .debug_line    0x0000000000012d0f       0x81 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(bpabi.o)
- .debug_line    0x0000000000012d90       0x7f /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_dvmd_tls.o)
- .debug_line    0x0000000000012e0f       0xf7 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_divdi3.o)
- .debug_line    0x0000000000012f06       0xef /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivdi3.o)
- .debug_line    0x0000000000012ff5       0xa2 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivsi3.o)
- .debug_line    0x0000000000013097      0x1f6 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-malloc.o)
- .debug_line    0x000000000001328d      0x334 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mallocr.o)
- .debug_line    0x00000000000135c1      0x1bf /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memcpy.o)
- .debug_line    0x0000000000013780      0x1b9 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memset.o)
- .debug_line    0x0000000000013939      0x242 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-sprintf.o)
- .debug_line    0x0000000000013b7b      0x11f /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcat.o)
- .debug_line    0x0000000000013c9a       0xfd /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcpy.o)
- .debug_line    0x0000000000013d97      0x160 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strlen.o)
- .debug_line    0x0000000000013ef7      0x18f /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strncpy.o)
- .debug_line    0x0000000000014086      0xa56 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
- .debug_line    0x0000000000014adc      0x7cc /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-dtoa.o)
- .debug_line    0x00000000000152a8      0x259 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-freer.o)
- .debug_line    0x0000000000015501      0x15f /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-impure.o)
- .debug_line    0x0000000000015660      0x223 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-locale.o)
- .debug_line    0x0000000000015883      0x19d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memchr.o)
- .debug_line    0x0000000000015a20      0x6ac /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mprec.o)
- .debug_line    0x00000000000160cc      0x1a7 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-s_fpclassify.o)
- .debug_line    0x0000000000016273      0x109 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcmp.o)
- .debug_line    0x000000000001637c      0x6c4 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
- .debug_line    0x0000000000016a40      0x19c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-callocr.o)
- .debug_line    0x0000000000016bdc      0x1d3 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memmove.o)
- .debug_line    0x0000000000016daf      0x327 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-reallocr.o)
- .debug_line    0x00000000000170d6      0x21c /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_addsubdf3.o)
- .debug_line    0x00000000000172f2      0x238 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_muldivdf3.o)
- .debug_line    0x000000000001752a      0x11e /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_cmpdf2.o)
- .debug_line    0x0000000000017648       0x96 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_fixdfsi.o)
+ .debug_line    0x0000000000003027      0x7e1 src/main.o
+ .debug_line    0x0000000000003808      0x4f3 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_wwdg.o
+ .debug_line    0x0000000000003cfb      0x6fb libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_usart.o
+ .debug_line    0x00000000000043f6      0xce5 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.o
+ .debug_line    0x00000000000050db      0x4d1 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_syscfg.o
+ .debug_line    0x00000000000055ac      0x6c0 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_spi.o
+ .debug_line    0x0000000000005c6c      0x6af libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_sdio.o
+ .debug_line    0x000000000000631b      0xa84 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rtc.o
+ .debug_line    0x0000000000006d9f      0x4f4 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rng.o
+ .debug_line    0x0000000000007293      0x80c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
+ .debug_line    0x0000000000007a9f      0x55a libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_pwr.o
+ .debug_line    0x0000000000007ff9      0x4c8 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_iwdg.o
+ .debug_line    0x00000000000084c1      0x735 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_i2c.o
+ .debug_line    0x0000000000008bf6      0x5da libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_sha1.o
+ .debug_line    0x00000000000091d0      0x5bf libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_md5.o
+ .debug_line    0x000000000000978f      0x5dc libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash.o
+ .debug_line    0x0000000000009d6b      0x5aa libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
+ .debug_line    0x000000000000a315      0x6cc libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_fsmc.o
+ .debug_line    0x000000000000a9e1      0x6f7 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_flash.o
+ .debug_line    0x000000000000b0d8      0x514 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
+ .debug_line    0x000000000000b5ec      0x648 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dma.o
+ .debug_line    0x000000000000bc34      0x5ab libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dcmi.o
+ .debug_line    0x000000000000c1df      0x4b8 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dbgmcu.o
+ .debug_line    0x000000000000c697      0x5ce libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dac.o
+ .debug_line    0x000000000000cc65      0x5ce libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_tdes.o
+ .debug_line    0x000000000000d233      0x555 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_des.o
+ .debug_line    0x000000000000d788      0x90f libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_aes.o
+ .debug_line    0x000000000000e097      0x601 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp.o
+ .debug_line    0x000000000000e698      0x4d5 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_crc.o
+ .debug_line    0x000000000000eb6d      0x7de libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_can.o
+ .debug_line    0x000000000000f34b      0x4ba libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
+ .debug_line    0x000000000000f805      0x4d7 libraries/STM32F4-Discovery/stm32f4_discovery.o
+ .debug_line    0x000000000000fcdc      0x56e FreeRTOS/Source/timers.o
+ .debug_line    0x000000000001024a      0xd43 FreeRTOS/Source/tasks.o
+ .debug_line    0x0000000000010f8d      0x8ee FreeRTOS/Source/queue.o
+ .debug_line    0x000000000001187b      0x647 FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+ .debug_line    0x0000000000011ec2      0x716 FreeRTOS/Source/list.o
+ .debug_line    0x00000000000125d8      0x6a7 FreeRTOS/Source/croutine.o
+ .debug_line    0x0000000000012c7f       0x81 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_aeabi_uldivmod.o)
+ .debug_line    0x0000000000012d00       0x81 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(bpabi.o)
+ .debug_line    0x0000000000012d81       0x7f /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_dvmd_tls.o)
+ .debug_line    0x0000000000012e00       0xf7 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_divdi3.o)
+ .debug_line    0x0000000000012ef7       0xef /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivdi3.o)
+ .debug_line    0x0000000000012fe6       0xa2 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivsi3.o)
+ .debug_line    0x0000000000013088      0x1f6 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-malloc.o)
+ .debug_line    0x000000000001327e      0x334 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mallocr.o)
+ .debug_line    0x00000000000135b2      0x1bf /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memcpy.o)
+ .debug_line    0x0000000000013771      0x1b9 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memset.o)
+ .debug_line    0x000000000001392a      0x242 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-sprintf.o)
+ .debug_line    0x0000000000013b6c      0x11f /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcat.o)
+ .debug_line    0x0000000000013c8b       0xfd /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcpy.o)
+ .debug_line    0x0000000000013d88      0x160 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strlen.o)
+ .debug_line    0x0000000000013ee8      0x18f /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strncpy.o)
+ .debug_line    0x0000000000014077      0xa56 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
+ .debug_line    0x0000000000014acd      0x7cc /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-dtoa.o)
+ .debug_line    0x0000000000015299      0x259 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-freer.o)
+ .debug_line    0x00000000000154f2      0x15f /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-impure.o)
+ .debug_line    0x0000000000015651      0x223 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-locale.o)
+ .debug_line    0x0000000000015874      0x19d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memchr.o)
+ .debug_line    0x0000000000015a11      0x6ac /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mprec.o)
+ .debug_line    0x00000000000160bd      0x1a7 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-s_fpclassify.o)
+ .debug_line    0x0000000000016264      0x109 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcmp.o)
+ .debug_line    0x000000000001636d      0x6c4 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
+ .debug_line    0x0000000000016a31      0x19c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-callocr.o)
+ .debug_line    0x0000000000016bcd      0x1d3 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memmove.o)
+ .debug_line    0x0000000000016da0      0x327 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-reallocr.o)
+ .debug_line    0x00000000000170c7      0x21c /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_addsubdf3.o)
+ .debug_line    0x00000000000172e3      0x238 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_muldivdf3.o)
+ .debug_line    0x000000000001751b      0x11e /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_cmpdf2.o)
+ .debug_line    0x0000000000017639       0x96 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_arm_fixdfsi.o)
 
 .debug_macinfo  0x0000000000000000   0xfff261
  .debug_macinfo
@@ -2982,7 +2858,7 @@ OUTPUT(luba3 elf32-littlearm)
                 0x0000000000004375       0x21 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-reallocr.o)
 
 .debug_pubtypes
-                0x0000000000000000     0x3080
+                0x0000000000000000     0x308b
  .debug_pubtypes
                 0x0000000000000000       0x7b src/ustime.o
  .debug_pubtypes
@@ -2998,129 +2874,129 @@ OUTPUT(luba3 elf32-littlearm)
  .debug_pubtypes
                 0x0000000000000631      0x178 src/radar.o
  .debug_pubtypes
-                0x00000000000007a9       0xea src/main.o
+                0x00000000000007a9       0xf5 src/main.o
  .debug_pubtypes
-                0x0000000000000893       0x57 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_wwdg.o
+                0x000000000000089e       0x57 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_wwdg.o
  .debug_pubtypes
-                0x00000000000008ea       0xcd libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_usart.o
+                0x00000000000008f5       0xcd libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_usart.o
  .debug_pubtypes
-                0x00000000000009b7       0xe4 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.o
+                0x00000000000009c2       0xe4 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.o
  .debug_pubtypes
-                0x0000000000000a9b       0x6d libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_syscfg.o
+                0x0000000000000aa6       0x6d libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_syscfg.o
  .debug_pubtypes
-                0x0000000000000b08       0xbc libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_spi.o
+                0x0000000000000b13       0xbc libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_spi.o
  .debug_pubtypes
-                0x0000000000000bc4       0xbe libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_sdio.o
+                0x0000000000000bcf       0xbe libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_sdio.o
  .debug_pubtypes
-                0x0000000000000c82       0xd8 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rtc.o
+                0x0000000000000c8d       0xd8 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rtc.o
  .debug_pubtypes
-                0x0000000000000d5a       0x77 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rng.o
+                0x0000000000000d65       0x77 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rng.o
  .debug_pubtypes
-                0x0000000000000dd1       0xaa libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
+                0x0000000000000ddc       0xaa libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
  .debug_pubtypes
-                0x0000000000000e7b       0x84 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_pwr.o
+                0x0000000000000e86       0x84 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_pwr.o
  .debug_pubtypes
-                0x0000000000000eff       0x64 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_iwdg.o
+                0x0000000000000f0a       0x64 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_iwdg.o
  .debug_pubtypes
-                0x0000000000000f63       0xbe libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_i2c.o
+                0x0000000000000f6e       0xbe libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_i2c.o
  .debug_pubtypes
-                0x0000000000001021       0x7c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_sha1.o
+                0x000000000000102c       0x7c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_sha1.o
  .debug_pubtypes
-                0x000000000000109d       0x7c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_md5.o
+                0x00000000000010a8       0x7c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_md5.o
  .debug_pubtypes
-                0x0000000000001119       0xbe libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash.o
+                0x0000000000001124       0xbe libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash.o
  .debug_pubtypes
-                0x00000000000011d7       0xce libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
+                0x00000000000011e2       0xce libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
  .debug_pubtypes
-                0x00000000000012a5      0x174 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_fsmc.o
+                0x00000000000012b0      0x174 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_fsmc.o
  .debug_pubtypes
-                0x0000000000001419       0x97 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_flash.o
+                0x0000000000001424       0x97 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_flash.o
  .debug_pubtypes
-                0x00000000000014b0       0xae libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
+                0x00000000000014bb       0xae libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
  .debug_pubtypes
-                0x000000000000155e       0xa3 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dma.o
+                0x0000000000001569       0xa3 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dma.o
  .debug_pubtypes
-                0x0000000000001601       0xcd libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dcmi.o
+                0x000000000000160c       0xcd libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dcmi.o
  .debug_pubtypes
-                0x00000000000016ce       0x52 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dbgmcu.o
+                0x00000000000016d9       0x52 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dbgmcu.o
  .debug_pubtypes
-                0x0000000000001720       0x98 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dac.o
+                0x000000000000172b       0x98 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dac.o
  .debug_pubtypes
-                0x00000000000017b8       0x98 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_tdes.o
+                0x00000000000017c3       0x98 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_tdes.o
  .debug_pubtypes
-                0x0000000000001850       0x98 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_des.o
+                0x000000000000185b       0x98 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_des.o
  .debug_pubtypes
-                0x00000000000018e8       0x98 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_aes.o
+                0x00000000000018f3       0x98 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_aes.o
  .debug_pubtypes
-                0x0000000000001980       0xea libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp.o
+                0x000000000000198b       0xea libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp.o
  .debug_pubtypes
-                0x0000000000001a6a       0x54 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_crc.o
+                0x0000000000001a75       0x54 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_crc.o
  .debug_pubtypes
-                0x0000000000001abe      0x121 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_can.o
+                0x0000000000001ac9      0x121 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_can.o
  .debug_pubtypes
-                0x0000000000001bdf       0x8c libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
+                0x0000000000001bea       0x8c libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
  .debug_pubtypes
-                0x0000000000001c6b      0x16e libraries/STM32F4-Discovery/stm32f4_discovery.o
+                0x0000000000001c76      0x16e libraries/STM32F4-Discovery/stm32f4_discovery.o
  .debug_pubtypes
-                0x0000000000001dd9       0x1e FreeRTOS/Source/timers.o
+                0x0000000000001de4       0x1e FreeRTOS/Source/timers.o
  .debug_pubtypes
-                0x0000000000001df7      0x14a FreeRTOS/Source/tasks.o
+                0x0000000000001e02      0x14a FreeRTOS/Source/tasks.o
  .debug_pubtypes
-                0x0000000000001f41       0xe0 FreeRTOS/Source/queue.o
+                0x0000000000001f4c       0xe0 FreeRTOS/Source/queue.o
  .debug_pubtypes
-                0x0000000000002021       0x4c FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+                0x000000000000202c       0x4c FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
  .debug_pubtypes
-                0x000000000000206d       0x86 FreeRTOS/Source/list.o
+                0x0000000000002078       0x86 FreeRTOS/Source/list.o
  .debug_pubtypes
-                0x00000000000020f3       0xd9 FreeRTOS/Source/croutine.o
+                0x00000000000020fe       0xd9 FreeRTOS/Source/croutine.o
  .debug_pubtypes
-                0x00000000000021cc       0x59 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_divdi3.o)
+                0x00000000000021d7       0x59 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_divdi3.o)
  .debug_pubtypes
-                0x0000000000002225       0x59 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivdi3.o)
+                0x0000000000002230       0x59 /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivdi3.o)
  .debug_pubtypes
-                0x000000000000227e       0xe8 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-malloc.o)
+                0x0000000000002289       0xe8 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-malloc.o)
  .debug_pubtypes
-                0x0000000000002366      0x120 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mallocr.o)
+                0x0000000000002371      0x120 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mallocr.o)
  .debug_pubtypes
-                0x0000000000002486       0x1d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memcpy.o)
+                0x0000000000002491       0x1d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memcpy.o)
  .debug_pubtypes
-                0x00000000000024a3       0x1d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memset.o)
+                0x00000000000024ae       0x1d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memset.o)
  .debug_pubtypes
-                0x00000000000024c0      0x113 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-sprintf.o)
+                0x00000000000024cb      0x113 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-sprintf.o)
  .debug_pubtypes
-                0x00000000000025d3       0x12 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcat.o)
+                0x00000000000025de       0x12 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcat.o)
  .debug_pubtypes
-                0x00000000000025e5       0x12 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcpy.o)
+                0x00000000000025f0       0x12 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcpy.o)
  .debug_pubtypes
-                0x00000000000025f7       0x1d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strlen.o)
+                0x0000000000002602       0x1d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strlen.o)
  .debug_pubtypes
-                0x0000000000002614       0x1d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strncpy.o)
+                0x000000000000261f       0x1d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strncpy.o)
  .debug_pubtypes
-                0x0000000000002631      0x179 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
+                0x000000000000263c      0x179 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
  .debug_pubtypes
-                0x00000000000027aa      0x109 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-dtoa.o)
+                0x00000000000027b5      0x109 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-dtoa.o)
  .debug_pubtypes
-                0x00000000000028b3      0x120 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-freer.o)
+                0x00000000000028be      0x120 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-freer.o)
  .debug_pubtypes
-                0x00000000000029d3       0xdd /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-impure.o)
+                0x00000000000029de       0xdd /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-impure.o)
  .debug_pubtypes
-                0x0000000000002ab0       0xe7 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-locale.o)
+                0x0000000000002abb       0xe7 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-locale.o)
  .debug_pubtypes
-                0x0000000000002b97       0x1d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memchr.o)
+                0x0000000000002ba2       0x1d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memchr.o)
  .debug_pubtypes
-                0x0000000000002bb4      0x109 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mprec.o)
+                0x0000000000002bbf      0x109 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mprec.o)
  .debug_pubtypes
-                0x0000000000002cbd       0x21 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-s_fpclassify.o)
+                0x0000000000002cc8       0x21 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-s_fpclassify.o)
  .debug_pubtypes
-                0x0000000000002cde       0x12 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcmp.o)
+                0x0000000000002ce9       0x12 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcmp.o)
  .debug_pubtypes
-                0x0000000000002cf0      0x159 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
+                0x0000000000002cfb      0x159 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
  .debug_pubtypes
-                0x0000000000002e49      0x107 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-callocr.o)
+                0x0000000000002e54      0x107 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-callocr.o)
  .debug_pubtypes
-                0x0000000000002f50       0x1d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memmove.o)
+                0x0000000000002f5b       0x1d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memmove.o)
  .debug_pubtypes
-                0x0000000000002f6d      0x113 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-reallocr.o)
+                0x0000000000002f78      0x113 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-reallocr.o)
 
 .debug_aranges  0x0000000000000000     0x1db8
  .debug_aranges
@@ -3328,7 +3204,7 @@ OUTPUT(luba3 elf32-littlearm)
  .debug_ranges  0x0000000000001b90       0x18 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-callocr.o)
  .debug_ranges  0x0000000000001ba8       0xf0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-reallocr.o)
 
-.debug_str      0x0000000000000000     0x8d70
+.debug_str      0x0000000000000000     0x8d57
  .debug_str     0x0000000000000000      0x313 src/ustime.o
                                         0x367 (size before relaxing)
  .debug_str     0x0000000000000313      0xbe6 src/uart.o
@@ -3343,131 +3219,131 @@ OUTPUT(luba3 elf32-littlearm)
                                         0x2a1 (size before relaxing)
  .debug_str     0x000000000000132d      0x1d9 src/radar.o
                                         0xa29 (size before relaxing)
- .debug_str     0x0000000000001506       0x71 src/main.o
-                                        0x32c (size before relaxing)
- .debug_str     0x0000000000001577       0xde libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_wwdg.o
+ .debug_str     0x0000000000001506       0x58 src/main.o
+                                        0x32d (size before relaxing)
+ .debug_str     0x000000000000155e       0xde libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_wwdg.o
                                         0x1f9 (size before relaxing)
- .debug_str     0x0000000000001655      0x3ad libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_usart.o
+ .debug_str     0x000000000000163c      0x3ad libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_usart.o
                                         0x606 (size before relaxing)
- .debug_str     0x0000000000001a02      0xae2 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.o
+ .debug_str     0x00000000000019e9      0xae2 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.o
                                         0xd47 (size before relaxing)
- .debug_str     0x00000000000024e4      0x141 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_syscfg.o
+ .debug_str     0x00000000000024cb      0x141 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_syscfg.o
                                         0x276 (size before relaxing)
- .debug_str     0x0000000000002625      0x399 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_spi.o
+ .debug_str     0x000000000000260c      0x399 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_spi.o
                                         0x601 (size before relaxing)
- .debug_str     0x00000000000029be      0x479 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_sdio.o
+ .debug_str     0x00000000000029a5      0x479 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_sdio.o
                                         0x5c2 (size before relaxing)
- .debug_str     0x0000000000002e37      0x971 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rtc.o
+ .debug_str     0x0000000000002e1e      0x971 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rtc.o
                                         0xaca (size before relaxing)
- .debug_str     0x00000000000037a8       0xd2 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rng.o
+ .debug_str     0x000000000000378f       0xd2 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rng.o
                                         0x1fb (size before relaxing)
- .debug_str     0x000000000000387a      0x4d6 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
+ .debug_str     0x0000000000003861      0x4d6 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.o
                                         0x7c7 (size before relaxing)
- .debug_str     0x0000000000003d50      0x157 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_pwr.o
+ .debug_str     0x0000000000003d37      0x157 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_pwr.o
                                         0x2f1 (size before relaxing)
- .debug_str     0x0000000000003ea7       0xdb libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_iwdg.o
+ .debug_str     0x0000000000003e8e       0xdb libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_iwdg.o
                                         0x1e3 (size before relaxing)
- .debug_str     0x0000000000003f82      0x3b5 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_i2c.o
+ .debug_str     0x0000000000003f69      0x3b5 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_i2c.o
                                         0x5dc (size before relaxing)
- .debug_str     0x0000000000004337      0x140 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_sha1.o
+ .debug_str     0x000000000000431e      0x140 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_sha1.o
                                         0x26e (size before relaxing)
- .debug_str     0x0000000000004477       0x7c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_md5.o
+ .debug_str     0x000000000000445e       0x7c libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_md5.o
                                         0x269 (size before relaxing)
- .debug_str     0x00000000000044f3      0x202 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash.o
+ .debug_str     0x00000000000044da      0x202 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash.o
                                         0x3a9 (size before relaxing)
- .debug_str     0x00000000000046f5      0x17e libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
+ .debug_str     0x00000000000046dc      0x17e libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.o
                                         0x41a (size before relaxing)
- .debug_str     0x0000000000004873      0x5c5 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_fsmc.o
+ .debug_str     0x000000000000485a      0x5c5 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_fsmc.o
                                         0x70b (size before relaxing)
- .debug_str     0x0000000000004e38      0x397 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_flash.o
+ .debug_str     0x0000000000004e1f      0x397 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_flash.o
                                         0x4fe (size before relaxing)
- .debug_str     0x00000000000051cf       0xf3 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
+ .debug_str     0x00000000000051b6       0xf3 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.o
                                         0x2e5 (size before relaxing)
- .debug_str     0x00000000000052c2      0x377 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dma.o
+ .debug_str     0x00000000000052a9      0x377 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dma.o
                                         0x4c3 (size before relaxing)
- .debug_str     0x0000000000005639      0x308 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dcmi.o
+ .debug_str     0x0000000000005620      0x308 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dcmi.o
                                         0x450 (size before relaxing)
- .debug_str     0x0000000000005941       0xcf libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dbgmcu.o
+ .debug_str     0x0000000000005928       0xcf libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dbgmcu.o
                                         0x1cc (size before relaxing)
- .debug_str     0x0000000000005a10      0x281 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dac.o
+ .debug_str     0x00000000000059f7      0x281 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dac.o
                                         0x3ca (size before relaxing)
- .debug_str     0x0000000000005c91      0x1de libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_tdes.o
+ .debug_str     0x0000000000005c78      0x1de libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_tdes.o
                                         0x34f (size before relaxing)
- .debug_str     0x0000000000005e6f       0x5b libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_des.o
+ .debug_str     0x0000000000005e56       0x5b libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_des.o
                                         0x349 (size before relaxing)
- .debug_str     0x0000000000005eca       0xba libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_aes.o
+ .debug_str     0x0000000000005eb1       0xba libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_aes.o
                                         0x35e (size before relaxing)
- .debug_str     0x0000000000005f84      0x272 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp.o
+ .debug_str     0x0000000000005f6b      0x272 libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp.o
                                         0x534 (size before relaxing)
- .debug_str     0x00000000000061f6       0xbd libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_crc.o
+ .debug_str     0x00000000000061dd       0xbd libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_crc.o
                                         0x1c2 (size before relaxing)
- .debug_str     0x00000000000062b3      0x50f libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_can.o
+ .debug_str     0x000000000000629a      0x50f libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_can.o
                                         0x6b5 (size before relaxing)
- .debug_str     0x00000000000067c2      0x14f libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
+ .debug_str     0x00000000000067a9      0x14f libraries/STM32F4xx_StdPeriph_Driver/src/misc.o
                                         0x350 (size before relaxing)
- .debug_str     0x0000000000006911      0x189 libraries/STM32F4-Discovery/stm32f4_discovery.o
+ .debug_str     0x00000000000068f8      0x189 libraries/STM32F4-Discovery/stm32f4_discovery.o
                                         0xa8c (size before relaxing)
- .debug_str     0x0000000000006a9a       0x1c FreeRTOS/Source/timers.o
+ .debug_str     0x0000000000006a81       0x1c FreeRTOS/Source/timers.o
                                          0xe8 (size before relaxing)
- .debug_str     0x0000000000006ab6      0x933 FreeRTOS/Source/tasks.o
+ .debug_str     0x0000000000006a9d      0x933 FreeRTOS/Source/tasks.o
                                         0xac3 (size before relaxing)
- .debug_str     0x00000000000073e9      0x2af FreeRTOS/Source/queue.o
+ .debug_str     0x00000000000073d0      0x2af FreeRTOS/Source/queue.o
                                         0x4a6 (size before relaxing)
- .debug_str     0x0000000000007698      0x12b FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+ .debug_str     0x000000000000767f      0x12b FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
                                         0x243 (size before relaxing)
- .debug_str     0x00000000000077c3       0xa6 FreeRTOS/Source/list.o
+ .debug_str     0x00000000000077aa       0xa6 FreeRTOS/Source/list.o
                                         0x21c (size before relaxing)
- .debug_str     0x0000000000007869      0x252 FreeRTOS/Source/croutine.o
+ .debug_str     0x0000000000007850      0x252 FreeRTOS/Source/croutine.o
                                         0x428 (size before relaxing)
- .debug_str     0x0000000000007abb       0xed /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(bpabi.o)
+ .debug_str     0x0000000000007aa2       0xed /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(bpabi.o)
                                         0x11e (size before relaxing)
- .debug_str     0x0000000000007ba8       0xda /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_divdi3.o)
+ .debug_str     0x0000000000007b8f       0xda /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_divdi3.o)
                                         0x1f5 (size before relaxing)
- .debug_str     0x0000000000007c82        0xa /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivdi3.o)
+ .debug_str     0x0000000000007c69        0xa /home/raul/sat/lib/gcc/arm-none-eabi/4.5.2/thumb/v7/libgcc.a(_udivdi3.o)
                                         0x1f6 (size before relaxing)
- .debug_str     0x0000000000007c8c       0xc8 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-malloc.o)
+ .debug_str     0x0000000000007c73       0xc8 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-malloc.o)
                                         0x52b (size before relaxing)
- .debug_str     0x0000000000007d54      0x20d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mallocr.o)
+ .debug_str     0x0000000000007d3b      0x20d /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mallocr.o)
                                         0x700 (size before relaxing)
- .debug_str     0x0000000000007f61       0xea /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memcpy.o)
+ .debug_str     0x0000000000007f48       0xea /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memcpy.o)
                                         0x186 (size before relaxing)
- .debug_str     0x000000000000804b       0x65 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memset.o)
+ .debug_str     0x0000000000008032       0x65 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memset.o)
                                         0x173 (size before relaxing)
- .debug_str     0x00000000000080b0       0xec /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-sprintf.o)
+ .debug_str     0x0000000000008097       0xec /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-sprintf.o)
                                         0x549 (size before relaxing)
- .debug_str     0x000000000000819c       0x5c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcat.o)
+ .debug_str     0x0000000000008183       0x5c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcat.o)
                                         0x163 (size before relaxing)
- .debug_str     0x00000000000081f8       0xd0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcpy.o)
+ .debug_str     0x00000000000081df       0xd0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcpy.o)
                                         0x165 (size before relaxing)
- .debug_str     0x00000000000082c8       0x59 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strlen.o)
+ .debug_str     0x00000000000082af       0x59 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strlen.o)
                                         0x16c (size before relaxing)
- .debug_str     0x0000000000008321       0x53 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strncpy.o)
+ .debug_str     0x0000000000008308       0x53 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strncpy.o)
                                         0x189 (size before relaxing)
- .debug_str     0x0000000000008374      0x1ae /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
+ .debug_str     0x000000000000835b      0x1ae /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfprintf.o)
                                         0x6f4 (size before relaxing)
- .debug_str     0x0000000000008522      0x10b /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-dtoa.o)
+ .debug_str     0x0000000000008509      0x10b /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-dtoa.o)
                                         0x610 (size before relaxing)
- .debug_str     0x000000000000862d       0x3c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-freer.o)
+ .debug_str     0x0000000000008614       0x3c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-freer.o)
                                         0x652 (size before relaxing)
- .debug_str     0x0000000000008669       0xd9 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-impure.o)
+ .debug_str     0x0000000000008650       0xd9 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-impure.o)
                                         0x529 (size before relaxing)
- .debug_str     0x0000000000008742      0x297 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-locale.o)
+ .debug_str     0x0000000000008729      0x297 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-locale.o)
                                         0x77f (size before relaxing)
- .debug_str     0x00000000000089d9       0x5f /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memchr.o)
+ .debug_str     0x00000000000089c0       0x5f /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memchr.o)
                                         0x179 (size before relaxing)
- .debug_str     0x0000000000008a38      0x107 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mprec.o)
+ .debug_str     0x0000000000008a1f      0x107 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-mprec.o)
                                         0x61d (size before relaxing)
- .debug_str     0x0000000000008b3f       0xd0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-s_fpclassify.o)
+ .debug_str     0x0000000000008b26       0xd0 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-s_fpclassify.o)
                                         0x189 (size before relaxing)
- .debug_str     0x0000000000008c0f       0x6a /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcmp.o)
+ .debug_str     0x0000000000008bf6       0x6a /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-strcmp.o)
                                         0x176 (size before relaxing)
- .debug_str     0x0000000000008c79       0x29 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
+ .debug_str     0x0000000000008c60       0x29 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-svfiprintf.o)
                                         0x667 (size before relaxing)
- .debug_str     0x0000000000008ca2       0x19 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-callocr.o)
+ .debug_str     0x0000000000008c89       0x19 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-callocr.o)
                                         0x551 (size before relaxing)
- .debug_str     0x0000000000008cbb       0x5c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memmove.o)
+ .debug_str     0x0000000000008ca2       0x5c /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-memmove.o)
                                         0x192 (size before relaxing)
- .debug_str     0x0000000000008d17       0x59 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-reallocr.o)
+ .debug_str     0x0000000000008cfe       0x59 /home/raul/sat/arm-none-eabi/lib/thumb/v7/libg.a(lib_a-reallocr.o)
                                         0x5d2 (size before relaxing)
 
 .comment        0x0000000000000000       0x26

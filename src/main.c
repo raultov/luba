@@ -105,8 +105,8 @@ int main(void) {
         system_stm32f4xx.c file
      */
 
+	/*
 	// FreeRTOS assumes 4 preemption- and 0 subpriority-bits
-	//
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
 
 	// GPIOD Periph clock enable
@@ -130,18 +130,27 @@ int main(void) {
 	p->name = malloc(16);
 	p->interval = 0xFFFFFF;
 	sprintf(p->name, "FPU_%d", 0x0FFFFF);
-
+*/
 	initUsTimer();
-
+/*
 	xTaskCreate(radar_task, (int8_t*)p->name, 1024, NULL, tskIDLE_PRIORITY, &radarHandle);
 
 	xTaskCreate(leds_task, (int8_t*)p->name, 1024, p, tskIDLE_PRIORITY, &ledsHandle);
 
 	vTaskStartScheduler();
-/*
-	temperatureRH values;
+	*/
+
+	temperatureRH * values;
+	values = malloc (sizeof(struct TEMPERATURE_RH));
 
 	init_temperatureRH(GPIOA, GPIO_Pin_13);
+
+
+	while (1) {
+
+	}
+
+/*	init_temperatureRH(GPIOA, GPIO_Pin_13);
 
 	while (1) {
 
