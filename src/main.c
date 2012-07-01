@@ -147,7 +147,9 @@ int main(void) {
 
 
 	while (1) {
-
+		uint8_t ret = read_values_temperatureRH(values);
+		ret = ret + 1;
+		delayUs(1000000);  // Wait 1s recommended delay before accessing sensor
 	}
 
 /*	init_temperatureRH(GPIOA, GPIO_Pin_13);

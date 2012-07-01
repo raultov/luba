@@ -1,5 +1,5 @@
 /*
- * temperatureAndHR.c
+ * temperatureAndRH.c
  *
  *  Created on: 17/06/2012
  *      Author: raul

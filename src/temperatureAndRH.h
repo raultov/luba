@@ -1,12 +1,12 @@
 /*
- * temperatureAndHR.h
+ * temperatureAndRH.h
  *
  *  Created on: 17/06/2012
  *      Author: raul
  */
 
-#ifndef TEMPERATUREANDHR_H_
-#define TEMPERATUREANDHR_H_
+#ifndef TEMPERATUREANDRH_H_
+#define TEMPERATUREANDRH_H_
 
 #include "stm32f4_discovery.h"
 
@@ -33,4 +33,4 @@ void init_temperatureRH(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
 uint8_t read_values_temperatureRH(temperatureRH * values);
 
 
-#endif /* TEMPERATUREANDHR_H_ */
+#endif /* TEMPERATUREANDRH_H_ */
