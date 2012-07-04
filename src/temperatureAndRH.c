@@ -62,12 +62,16 @@ void init_temperatureRH(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
         uint8_t bits[5];
         uint8_t cnt = 7;
         uint8_t idx = 0;
+        uint64_t t = 0;
 
         // EMPTY BUFFER
-        for (int i=0; i< 5; i++) bits[i] = 0;
+        for (int i = 0; i < 5; i++) bits[i] = 0;
 
         // REQUEST SAMPLE
         output_mode_temperatureRH();
+
+        uint64_t inicio = getUsTime();
+
         GPIO_ResetBits(GPIOx_temperatureRH, GPIO_Pin_temperatureRH);
         delayMs(18);
         GPIO_SetBits(GPIOx_temperatureRH, GPIO_Pin_temperatureRH);
@@ -75,40 +79,49 @@ void init_temperatureRH(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
         input_mode_temperatureRH();
 
         // ACKNOWLEDGE or TIMEOUT
-        unsigned int loopCnt = 10000;
+        t = getUsTime();
+        uint64_t diff = 0;
+        unsigned int ciclos = 0;
         while (GPIO_ReadInputDataBit(GPIOx_temperatureRH, GPIO_Pin_temperatureRH) == Bit_RESET) {
-        	if (loopCnt-- == 0) {
+        	ciclos++;
+        	diff = getUsTime() - t;
+        	if (diff > 80) {
         		return DHT_ERROR_TIMEOUT;
         	}
         }
 
-        loopCnt = 10000;
+        //t = getUsTime();
+        ciclos = 0;
         while (GPIO_ReadInputDataBit(GPIOx_temperatureRH, GPIO_Pin_temperatureRH) == Bit_SET) {
-        	if (loopCnt-- == 0) {
-        		return DHT_ERROR_TIMEOUT;
-        	}
+        	ciclos++;
+        	//diff = getUsTime() - t;
+          	if (diff > 10000) {
+            	return DHT_ERROR_TIMEOUT;
+            }
         }
 
+        t = getUsTime();
+        uint64_t ladife = t - inicio;
         // READ OUTPUT - 40 BITS => 5 BYTES or TIMEOUT
-        for (int i=0; i<40; i++) {
+        for (int i = 0; i < 40; i++) {
 
-        	loopCnt = 10000;
+        	t = getUsTime();
             while (GPIO_ReadInputDataBit(GPIOx_temperatureRH, GPIO_Pin_temperatureRH) == Bit_RESET) {
-            	if (loopCnt-- == 0) {
-            		return DHT_ERROR_TIMEOUT;
-            	}
+            	diff = getUsTime() - t;
+              	if (diff > 50) {
+                	return DHT_ERROR_TIMEOUT;
+                }
             }
 
-            uint64_t t = getUsTime();
-
-            loopCnt = 10000;
+            t = getUsTime();
             while (GPIO_ReadInputDataBit(GPIOx_temperatureRH, GPIO_Pin_temperatureRH) == Bit_SET) {
-            	if (loopCnt-- == 0) {
-            		return DHT_ERROR_TIMEOUT;
-            	}
+            	diff = getUsTime() - t;
+              	if (diff > 100) {
+                		return DHT_ERROR_TIMEOUT;
+                }
             }
 
-            if ((getUsTime() - t) > 40) {
+            if (diff > 40) {
             	bits[idx] |= (1 << cnt);
             }
 

@@ -131,6 +131,9 @@ int main(void) {
 	p->interval = 0xFFFFFF;
 	sprintf(p->name, "FPU_%d", 0x0FFFFF);
 */
+	// Enable GPIOA clock
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+
 	initUsTimer();
 /*
 	xTaskCreate(radar_task, (int8_t*)p->name, 1024, NULL, tskIDLE_PRIORITY, &radarHandle);
@@ -143,12 +146,11 @@ int main(void) {
 	temperatureRH * values;
 	values = malloc (sizeof(struct TEMPERATURE_RH));
 
-	init_temperatureRH(GPIOA, GPIO_Pin_13);
+	init_temperatureRH(GPIOA, GPIO_Pin_3);
 
 
 	while (1) {
 		uint8_t ret = read_values_temperatureRH(values);
-		ret = ret + 1;
 		delayUs(1000000);  // Wait 1s recommended delay before accessing sensor
 	}
 
