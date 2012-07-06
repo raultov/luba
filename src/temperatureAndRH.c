@@ -35,6 +35,7 @@ void output_mode_temperatureRH() {
 
 /* Functions ---------------------------------------------------------------- */
 
+
 void init_temperatureRH(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
 	GPIOx_temperatureRH = GPIOx;
 	GPIO_Pin_temperatureRH = GPIO_Pin;
@@ -49,14 +50,7 @@ void init_temperatureRH(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
 	delayUs(1000000);  // Wait 1s recommended delay before accessing sensor
 }
 
-/*
-  * Perform a read of values from temperature and Humidity. While this function is being executed no interruption or context change must be performed.
- *
- * 	\param  	temperatureRH values
- *
-*	\return		CODE operation
- */
- uint8_t read_values_temperatureRH(temperatureRH * values) {
+uint8_t read_values_temperatureRH(temperatureRH * values) {
 
         // BUFFER TO RECEIVE
         uint8_t bits[5];
@@ -70,8 +64,6 @@ void init_temperatureRH(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
         // REQUEST SAMPLE
         output_mode_temperatureRH();
 
-        uint64_t inicio = getUsTime();
-
         GPIO_ResetBits(GPIOx_temperatureRH, GPIO_Pin_temperatureRH);
         delayMs(18);
         GPIO_SetBits(GPIOx_temperatureRH, GPIO_Pin_temperatureRH);
@@ -79,23 +71,21 @@ void init_temperatureRH(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
         input_mode_temperatureRH();
 
         // ACKNOWLEDGE or TIMEOUT
-        //t = getUsTime();
         uint64_t diff = 0;
-        unsigned int ciclos = 0;
+        unsigned int cicles = 0;
         while (GPIO_ReadInputDataBit(GPIOx_temperatureRH, GPIO_Pin_temperatureRH) == Bit_RESET) {
-        	ciclos++;
-        	//diff = getUsTime() - t;
-        	if (diff > 80) {
+        	cicles++;
+
+        	if (cicles > 10000) {
         		return DHT_ERROR_TIMEOUT;
         	}
         }
 
-        //t = getUsTime();
-        ciclos = 0;
+        cicles = 0;
         while (GPIO_ReadInputDataBit(GPIOx_temperatureRH, GPIO_Pin_temperatureRH) == Bit_SET) {
-        	ciclos++;
-        	//diff = getUsTime() - t;
-          	if (ciclos > 10000) {
+        	cicles++;
+
+          	if (cicles > 10000) {
             	return DHT_ERROR_TIMEOUT;
             }
         }
@@ -103,20 +93,19 @@ void init_temperatureRH(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
         // READ OUTPUT - 40 BITS => 5 BYTES or TIMEOUT
         for (int i = 0; i < 40; i++) {
 
-        	//t = getUsTime();
-        	ciclos = 0;
+        	cicles = 0;
             while (GPIO_ReadInputDataBit(GPIOx_temperatureRH, GPIO_Pin_temperatureRH) == Bit_RESET) {
-            	ciclos++;
-              	if (ciclos > 10000) {
+            	cicles++;
+              	if (cicles > 10000) {
                 	return DHT_ERROR_TIMEOUT;
                 }
             }
 
-            ciclos = 0;
+            cicles = 0;
             t = getUsTime();
             while (GPIO_ReadInputDataBit(GPIOx_temperatureRH, GPIO_Pin_temperatureRH) == Bit_SET) {
-            	ciclos++;
-              	if (ciclos > 10000) {
+            	cicles++;
+              	if (cicles > 10000) {
                 		return DHT_ERROR_TIMEOUT;
                 }
             }

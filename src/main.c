@@ -76,21 +76,41 @@ static void radar_task(void *pvParameters) {
 
 static void leds_task(void *pvParameters) {
 
-      while (1) {
-        /* PD12 to be toggled */
-        GPIO_SetBits(GPIOD, GPIO_Pin_12);
-        delayUs(1000000);
+	while (1) {
+		/* PD12 to be toggled */
+		GPIO_SetBits(GPIOD, GPIO_Pin_12);
+		delayUs(1000000);
 
-        /* PD14 to be toggled */
-        GPIO_SetBits(GPIOD, GPIO_Pin_14);
-        delayUs(1000000);
+		/* PD14 to be toggled */
+		GPIO_SetBits(GPIOD, GPIO_Pin_14);
+		delayUs(1000000);
 
-        GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_14);
-        delayUs(1000000);
-        /* Insert delay */
-        //Delay(p->interval);
-      }
- }
+		GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_14);
+		delayUs(1000000);
+		/* Insert delay */
+		//Delay(p->interval);
+	}
+}
+
+static void temperatureRH_task (void *pvParameters) {
+
+	temperatureRH * values;
+	values = malloc (sizeof(struct TEMPERATURE_RH));
+
+	while (1) {
+
+		// We read values of temperature and relative humidity every 30 seconds
+		delayUs(30000000);
+
+		vTaskSuspend(radarHandle);
+		vTaskSuspend(ledsHandle);
+
+		uint8_t ret = read_values_temperatureRH(values);
+
+		vTaskResume(ledsHandle);
+		vTaskResume(radarHandle);
+	}
+}
 
 /**
   * @brief  Main program
@@ -105,7 +125,7 @@ int main(void) {
         system_stm32f4xx.c file
      */
 
-	/*
+
 	// FreeRTOS assumes 4 preemption- and 0 subpriority-bits
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
 
@@ -113,6 +133,8 @@ int main(void) {
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
 	// Enable GPIOA clock
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+
+	initUsTimer();
 
 	// Configure PD12, PD13, PD14 and PD15 in output pushpull mode
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14;
@@ -123,6 +145,7 @@ int main(void) {
 	GPIO_Init(GPIOD, &GPIO_InitStructure);
 
 	initRadar(GPIOD, GPIO_Pin_15, RCC_AHB1Periph_GPIOA, EXTI_PortSourceGPIOA, GPIOA, GPIO_Pin_0);
+	init_temperatureRH(GPIOA, GPIO_Pin_3);
 
 	struct task_param *p;
 
@@ -130,38 +153,15 @@ int main(void) {
 	p->name = malloc(16);
 	p->interval = 0xFFFFFF;
 	sprintf(p->name, "FPU_%d", 0x0FFFFF);
-*/
-	// Enable GPIOA clock
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
 
-	initUsTimer();
-/*
 	xTaskCreate(radar_task, (int8_t*)p->name, 1024, NULL, tskIDLE_PRIORITY, &radarHandle);
 
 	xTaskCreate(leds_task, (int8_t*)p->name, 1024, p, tskIDLE_PRIORITY, &ledsHandle);
 
+	xTaskCreate(temperatureRH_task, (int8_t*)p->name, 1024, NULL, tskIDLE_PRIORITY, NULL);
+
 	vTaskStartScheduler();
-	*/
 
-	temperatureRH * values;
-	values = malloc (sizeof(struct TEMPERATURE_RH));
-
-	init_temperatureRH(GPIOA, GPIO_Pin_3);
-
-
-	while (1) {
-		uint8_t ret = read_values_temperatureRH(values);
-		delayUs(1000000);  // Wait 1s recommended delay before accessing sensor
-	}
-
-/*	init_temperatureRH(GPIOA, GPIO_Pin_13);
-
-	while (1) {
-
-		uint8_t ret = 0;//read_values_temperatureRH(&values);
-		ret = ret + 1;
-	}
-*/
 	return 0;
 }
 

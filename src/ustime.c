@@ -57,7 +57,7 @@ void delayUs(unsigned long us)
 
 
 /**
- * Perform a millisecond delay
+ * Performs a millisecond delay
  *
  * \param  ms  number of milliseconds to wait.
  */
