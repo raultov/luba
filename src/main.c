@@ -107,6 +107,10 @@ static void temperatureRH_task (void *pvParameters) {
 
 		uint8_t ret = read_values_temperatureRH(values);
 
+		if (ret == 0) {
+			calculateSpeedSoundFactor(values->temperature, values->RH);
+		}
+
 		vTaskResume(ledsHandle);
 		vTaskResume(radarHandle);
 	}

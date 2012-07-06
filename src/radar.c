@@ -24,6 +24,9 @@ uint64_t delta = 0;
 xSemaphoreHandle xSemaphore = NULL;
 int32_t distance = -1;
 
+// 58 is the amount of microseconds spent by the sound wave to make 2 cm. The speed of sound used to determine this factor is 340 m/s
+uint64_t factorSoundSpeed = 58;
+
 
 /* Functions ---------------------------------------------------------------- */
 
@@ -85,35 +88,10 @@ void trigger(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
 
 }
 
-/**
- * Get the distance in centimeters
- *
- * \return the distance in centimers
- */
 int32_t getDistance() {
-	//int32_t distance = -1;
-
-	// See if we can obtain the semaphore.  If the semaphore is not available
-	// wait 10 ticks to see if it becomes free.
-	/*if ( xSemaphoreTake( xSemaphore, ( portTickType ) 10 ) == pdTRUE ) {
-
-		distance = delta / 58;
-	}*/
-
-	/*
-	if (calculating != 1) {
-		distance = delta / 58;
-	}
-*/
 	return distance;
 }
 
-/**
- * Perform a read of elapsed time while the specified pin is in high level. It must be called from a ISR
- *
- * \param  	GPIOx
- * 			GPIO_Pin
- */
 void processEchoFromISR(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
 
 	uint8_t state = GPIO_ReadInputDataBit(GPIOx, GPIO_Pin);
@@ -124,18 +102,16 @@ void processEchoFromISR(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
 
 		delta = t - t0;
 
-		distance = delta / 58;
-
-
-//		if (xSemaphoreGiveFromISR( xSemaphore, pdFALSE ) != pdTRUE ) {
-//	           // We would not expect this call to fail because we must have
-//	            // obtained the semaphore to get here.
-//		}
+		distance = delta / factorSoundSpeed;
 
 	} else {
 		t0 = getUsTime();
 	}
 
+}
+
+void calculateSpeedSoundFactor(uint8_t temperature, uint8_t RH) {
+	factorSoundSpeed = 58;
 }
 
 

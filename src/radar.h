@@ -25,9 +25,28 @@ void initRadar(GPIO_TypeDef* GPIOx_trigger, uint16_t GPIO_Pin_trigger, uint32_t 
 
 void trigger(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
 
+/**
+ * Get the distance in centimeters
+ *
+ * \return the distance in centimers
+ */
 int32_t getDistance();
 
+/**
+ * Performs a read of elapsed time while the specified pin is in high level. It must be called from a ISR
+ *
+ * \param  	GPIOx
+ * 			GPIO_Pin
+ */
 void processEchoFromISR(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
+
+/**
+ * Calculates and set the numeric factor of Speed Sound taking the values of temperature and relative humidity of air.
+ *
+ * \param	temperature in grades celsius
+ * \param	RH porcentage of relative humidity
+ */
+void calculateSpeedSoundFactor(uint8_t temperature, uint8_t RH);
 
 
 #endif /* RADAR_H_ */
