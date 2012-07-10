@@ -111,7 +111,11 @@ void processEchoFromISR(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
 }
 
 void calculateSpeedSoundFactor(uint8_t temperature, uint8_t RH) {
-	factorSoundSpeed = 58;
+	float n = 2.0f;
+	float t = (float) temperature;
+	float d = (0.0000606f * t) + 0.03313f;
+
+	factorSoundSpeed = (int) (n / d);
 }
 
 

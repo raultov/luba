@@ -207,6 +207,8 @@ void SystemInit(void)
   /* Set HSION bit */
   RCC->CR |= (uint32_t)0x00000001;
 
+  SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2));  /* set CP10 and CP11 Full Access */
+
   /* Reset CFGR register */
   RCC->CFGR = 0x00000000;
 

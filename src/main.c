@@ -100,7 +100,7 @@ static void temperatureRH_task (void *pvParameters) {
 	while (1) {
 
 		// We read values of temperature and relative humidity every 30 seconds
-		delayUs(30000000);
+		delayUs(2000000);
 
 		vTaskSuspend(radarHandle);
 		vTaskSuspend(ledsHandle);

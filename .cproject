@@ -27,7 +27,7 @@
 								</outputEntries>
 							</builder>
 							<tool command="arm-none-eabi-as" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.tool.gnu.assembler.1995731992" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler">
-								<option id="gnu.both.asm.option.flags.786679563" name="Assembler flags" superClass="gnu.both.asm.option.flags" value=" -Wa -mcpu=cortex-m4 -mthumb -mfloat-abi=softfp -mfpu=fpv4-sp-d16" valueType="string"/>
+								<option id="gnu.both.asm.option.flags.786679563" name="Assembler flags" superClass="gnu.both.asm.option.flags" value=" -Wa -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16" valueType="string"/>
 								<option id="gnu.both.asm.option.include.paths.1433288546" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="../luba3/src"/>
 									<listOptionValue builtIn="false" value="../luba3/Libraries/CMSIS/Include"/>
@@ -41,7 +41,7 @@
 							<tool command="gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.cross.c.compiler.1222434404" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler">
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.1834411357" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" value="gnu.c.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.debugging.level.357438156" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.misc.other.103252987" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c  -g  -std=gnu99 -gdwarf-2 -ffunction-sections -fdata-sections -fsingle-precision-constant -mcpu=cortex-m4 -mthumb -mfloat-abi=softfp -mfpu=fpv4-sp-d16" valueType="string"/>
+								<option id="gnu.c.compiler.option.misc.other.103252987" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c  -g  -std=gnu99 -gdwarf-2 -ffunction-sections -fdata-sections -fsingle-precision-constant -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16" valueType="string"/>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.212790406" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="USE_STM32F4_DISCOVERY"/>
 									<listOptionValue builtIn="false" value="STM32F4XX"/>
@@ -63,7 +63,7 @@
 							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.2116240271" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler">
 								<option id="gnu.cpp.compiler.option.optimization.level.1918682445" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.debugging.level.1273816381" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.other.other.193043850" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c  -g  -std=gnu99 -gdwarf-2 -ffunction-sections -fdata-sections -fsingle-precision-constant -mcpu=cortex-m4 -mthumb -mfloat-abi=softfp -mfpu=fpv4-sp-d16" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.other.193043850" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c  -g  -std=gnu99 -gdwarf-2 -ffunction-sections -fdata-sections -fsingle-precision-constant -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.include.paths.695893121" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="../luba3/src"/>
 									<listOptionValue builtIn="false" value="../luba3/Libraries/CMSIS/Include"/>
@@ -78,12 +78,12 @@
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1224138564" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool command="gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.cross.cpp.linker.13905754" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker">
-								<option id="gnu.cpp.link.option.flags.145484372" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-O0  -g -Wall  -fno-exceptions -ffunction-sections -fdata-sections  -nostartfiles -Wl,--gc-sections -Wl,-Map=linker.map,--gc-sections,-T &quot;${ProjDirPath}/src/stm32_flash.ld&quot; -mcpu=cortex-m4 -mthumb -mfloat-abi=softfp -mfpu=fpv4-sp-d16 -lgcc -lc -lg -lm" valueType="string"/>
+								<option id="gnu.cpp.link.option.flags.145484372" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-O0  -g -Wall  -fno-exceptions -ffunction-sections -fdata-sections  -nostartfiles -Wl,--gc-sections -Wl,-Map=linker.map,--gc-sections,-T &quot;${ProjDirPath}/src/stm32_flash.ld&quot; -fsingle-precision-constant -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -lgcc -lc -lg -lm" valueType="string"/>
 								<option id="gnu.cpp.link.option.nostart.448706471" name="Do not use standard start files (-nostartfiles)" superClass="gnu.cpp.link.option.nostart" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.nodeflibs.135057802" name="Do not use default libraries (-nodefaultlibs)" superClass="gnu.cpp.link.option.nodeflibs" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.paths.347914036" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="/opt/ARM/arm-linaro-eabi/lib/gcc/arm-none-eabi/4.6.2/thumb/cortex-m4"/>
-									<listOptionValue builtIn="false" value="/opt/ARM/arm-linaro-eabi/arm-none-eabi/lib/thumb/cortex-m4"/>
+									<listOptionValue builtIn="false" value="/opt/ARM/arm-linaro-eabi/lib/gcc/arm-none-eabi/4.6.2/thumb/cortex-m4/float-abi-hard/fpuv4-sp-d16"/>
+									<listOptionValue builtIn="false" value="/opt/ARM/arm-linaro-eabi/arm-none-eabi/lib/thumb/cortex-m4/float-abi-hard/fpuv4-sp-d16"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.752093718" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -182,24 +182,11 @@
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.release.887895804;cdt.managedbuild.config.gnu.cross.exe.release.887895804.304278820;cdt.managedbuild.tool.gnu.cross.c.compiler.434707226;cdt.managedbuild.tool.gnu.c.compiler.input.2020094998">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
-		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.23884709;cdt.managedbuild.config.gnu.cross.exe.debug.23884709.439831009;cdt.managedbuild.tool.gnu.cross.c.compiler.1038832735;cdt.managedbuild.tool.gnu.c.compiler.input.299678341">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.23884709;cdt.managedbuild.config.gnu.cross.exe.debug.23884709.;cdt.managedbuild.tool.gnu.cross.c.compiler.1222434404;cdt.managedbuild.tool.gnu.c.compiler.input.434336242">
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.release.887895804;cdt.managedbuild.config.gnu.cross.exe.release.887895804.304278820;cdt.managedbuild.tool.gnu.cross.c.compiler.434707226;cdt.managedbuild.tool.gnu.c.compiler.input.2020094998">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
-			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
-				<buildOutputProvider>
-					<openAction enabled="true" filePath=""/>
-					<parser enabled="true"/>
-				</buildOutputProvider>
-				<scannerInfoProvider id="specsFile">
-					<runAction arguments="-E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;" command="arm-none-eabi-gcc" useDefault="true"/>
-					<parser enabled="true"/>
-				</scannerInfoProvider>
-			</profile>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.release.887895804;cdt.managedbuild.config.gnu.cross.exe.release.887895804.;cdt.managedbuild.tool.gnu.cross.c.compiler.2001451771;cdt.managedbuild.tool.gnu.c.compiler.input.1307349951">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
@@ -210,6 +197,19 @@
 				</buildOutputProvider>
 				<scannerInfoProvider id="specsFile">
 					<runAction arguments="-E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;" command="arm-none-eabi-arm-none-eabi-gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.23884709;cdt.managedbuild.config.gnu.cross.exe.debug.23884709.;cdt.managedbuild.tool.gnu.cross.c.compiler.1222434404;cdt.managedbuild.tool.gnu.c.compiler.input.434336242">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;" command="arm-none-eabi-gcc" useDefault="true"/>
 					<parser enabled="true"/>
 				</scannerInfoProvider>
 			</profile>
@@ -227,19 +227,6 @@
 				</scannerInfoProvider>
 			</profile>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.release.887895804;cdt.managedbuild.config.gnu.cross.exe.release.887895804.;cdt.managedbuild.tool.gnu.cross.cpp.compiler.1635689605;cdt.managedbuild.tool.gnu.cpp.compiler.input.9258514">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
-			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
-				<buildOutputProvider>
-					<openAction enabled="true" filePath=""/>
-					<parser enabled="true"/>
-				</buildOutputProvider>
-				<scannerInfoProvider id="specsFile">
-					<runAction arguments="-E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;" command="arm-none-eabi-arm-none-eabi-g++" useDefault="true"/>
-					<parser enabled="true"/>
-				</scannerInfoProvider>
-			</profile>
-		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.23884709;cdt.managedbuild.config.gnu.cross.exe.debug.23884709.;cdt.managedbuild.tool.gnu.cross.cpp.compiler.2116240271;cdt.managedbuild.tool.gnu.cpp.compiler.input.1224138564">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
@@ -249,6 +236,19 @@
 				</buildOutputProvider>
 				<scannerInfoProvider id="specsFile">
 					<runAction arguments="-E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;" command="arm-none-eabi-g++" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.release.887895804;cdt.managedbuild.config.gnu.cross.exe.release.887895804.;cdt.managedbuild.tool.gnu.cross.cpp.compiler.1635689605;cdt.managedbuild.tool.gnu.cpp.compiler.input.9258514">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;" command="arm-none-eabi-arm-none-eabi-g++" useDefault="true"/>
 					<parser enabled="true"/>
 				</scannerInfoProvider>
 			</profile>
