@@ -73,7 +73,7 @@ void initRadar(GPIO_TypeDef* GPIOx_trigger, uint16_t GPIO_Pin_trigger, uint32_t 
 
 	EXTI_GenerateSWInterrupt(EXTI_Line0);
 
-	vSemaphoreCreateBinary( xSemaphore );
+	xSemaphore = xSemaphoreCreateMutex( );
 }
 
 void trigger(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
@@ -94,6 +94,8 @@ int32_t getDistance() {
 
 void processEchoFromISR(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
 
+	static signed portBASE_TYPE xHigherPriorityTaskWoken;
+
 	uint8_t state = GPIO_ReadInputDataBit(GPIOx, GPIO_Pin);
 
 	if (state == Bit_RESET) {
@@ -102,8 +104,14 @@ void processEchoFromISR(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
 
 		delta = t - t0;
 
-		distance = delta / factorSoundSpeed;
+		if ( xSemaphore != NULL ) {
+			if (xQueueReceiveFromISR( xSemaphore, NULL, NULL)) {
+				distance = delta / factorSoundSpeed;
 
+				xHigherPriorityTaskWoken = pdFALSE;
+				xSemaphoreGiveFromISR( xSemaphore, &xHigherPriorityTaskWoken );
+			}
+		}
 	} else {
 		t0 = getUsTime();
 	}
@@ -115,7 +123,13 @@ void calculateSpeedSoundFactor(uint8_t temperature, uint8_t RH) {
 	float t = (float) temperature;
 	float d = (0.0000606f * t) + 0.03313f;
 
-	factorSoundSpeed = (int) (n / d);
+	if( xSemaphore != NULL ) {
+		if( xSemaphoreTake( xSemaphore, 0 ) == pdTRUE ) {
+			factorSoundSpeed = (int) (n / d);
+
+			xSemaphoreGive( xSemaphore );
+		}
+	}
 }
 
 
