@@ -185,10 +185,10 @@ void EXTI0_IRQHandler(void)
 }
 
 void TIM2_IRQHandler(void) {
-	uint32_t counter = TIM_GetCounter(TIM2);
+	/*uint32_t counter = TIM_GetCounter(TIM2);
 	TIM_ClearFlag(TIM2, TIM_IT_Update);
 	counter = TIM_GetCounter(TIM2);
-	GPIO_ToggleBits(GPIOD, GPIO_Pin_13);
+	GPIO_ToggleBits(GPIOD, GPIO_Pin_13);*/
 }
 
 /**
