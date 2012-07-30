@@ -333,8 +333,8 @@ portTickType xItemValue;																\
 #define prvGetTCBFromHandle( pxHandle ) ( ( ( pxHandle ) == NULL ) ? ( tskTCB * ) pxCurrentTCB : ( tskTCB * ) ( pxHandle ) )
 
 /* Callback function prototypes. --------------------------*/
-extern void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName );
-extern void vApplicationTickHook( void );
+//extern void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName );
+//extern void vApplicationTickHook( void );
 		
 /* File private functions. --------------------------------*/
 
