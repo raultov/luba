@@ -148,6 +148,15 @@ int main(void) {
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOD, &GPIO_InitStructure);
 
+
+	// Configure PD12, PD13, PD14 and PD15 in output pushpull mode
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
 	initRadar(GPIOD, GPIO_Pin_15, RCC_AHB1Periph_GPIOA, EXTI_PortSourceGPIOA, GPIOA, GPIO_Pin_0);
 	init_temperatureRH(GPIOA, GPIO_Pin_3);
 
@@ -157,6 +166,12 @@ int main(void) {
 	p->name = malloc(16);
 	p->interval = 0xFFFFFF;
 	sprintf(p->name, "FPU_%d", 0x0FFFFF);
+
+
+	// Prueba con motor, mandamos un 1 por el pin PA7 y un 0 por el pin PA8
+	GPIO_SetBits(GPIOA, GPIO_Pin_7);
+	GPIO_ResetBits(GPIOA, GPIO_Pin_8);
+
 
 	xTaskCreate(radar_task, (int8_t*)p->name, 1024, NULL, tskIDLE_PRIORITY, &radarHandle);
 

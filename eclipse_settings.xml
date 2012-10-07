@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdtprojectproperties>
+<section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.IncludePaths">
+<language name="C Source File">
+<includepath workspace_path="true">/luba3/libraries/STM32F4-Discovery</includepath>
+<includepath workspace_path="true">/luba3/libraries/STM32F4xx_StdPeriph_Driver/inc</includepath>
+<includepath workspace_path="true">/luba3/libraries/CMSIS/Include</includepath>
+<includepath workspace_path="true">/luba3/libraries/CMSIS/ST/STM32F4xx/Include</includepath>
+<includepath workspace_path="true">/luba3/src</includepath>
+<includepath workspace_path="true">/luba3/FreeRTOS/Source/include</includepath>
+<includepath workspace_path="true">/luba3/FreeRTOS/Source/portable/GCC/ARM_CM4F</includepath>
+
+</language>
+<language name="C++ Source File">
+<includepath>luba3/src</includepath>
+<includepath>luba3/Libraries/CMSIS/Include</includepath>
+<includepath>luba3/Libraries/STM32F4xx_StdPeriph_Driver/inc</includepath>
+<includepath>luba3/Libraries/Device/STM32F4xx/Include</includepath>
+
+</language>
+<language name="Object File">
+
+</language>
+<language name="Assembly Source File">
+<includepath>luba3/src</includepath>
+<includepath>luba3/Libraries/CMSIS/Include</includepath>
+<includepath>luba3/Libraries/STM32F4xx_StdPeriph_Driver/inc</includepath>
+<includepath>luba3/Libraries/Device/STM32F4xx/Include</includepath>
+<includepath workspace_path="true">/luba3/FreeRTOS/Source/include</includepath>
+<includepath workspace_path="true">/luba3/FreeRTOS/Source/portable/GCC/ARM_CM4F</includepath>
+
+</language>
+</section>
+<section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.Macros">
+<language name="C Source File">
+<macro>
+<name>USE_STM32F4_DISCOVERY</name><value/>
+</macro>
+<macro>
+<name>STM32F4XX</name><value/>
+</macro>
+<macro>
+<name>USE_STDPERIPH_DRIVER</name><value/>
+</macro>
+
+</language>
+<language name="C++ Source File">
+<macro>
+<name>USE_STM32F4_DISCOVERY</name><value/>
+</macro>
+<macro>
+<name>STM32F4XX</name><value/>
+</macro>
+<macro>
+<name>USE_STDPERIPH_DRIVER</name><value/>
+</macro>
+
+</language>
+<language name="Object File">
+
+</language>
+<language name="Assembly Source File">
+
+</language>
+</section>
+</cdtprojectproperties>
