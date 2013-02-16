@@ -1,9 +1,16 @@
+BE CAREFUL!!!
+
+I am changing a lot this project, is far from being stable.
+
+MAIN COMPONENTS:
+
 STM32F4 discovery
 
 Freetos 1.6
 HC-SR04
 DHT11
 nRF24L01
+APC220
 
 GENERAL INSTRUCTIONS
 	- Install eclipse C/C++
