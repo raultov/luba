@@ -62,8 +62,7 @@ static inline void rb_free(struct ringbuf *rb)
  * \param   data  pointer to data byte
  * \return  number of bytes read (0 if buffer was empty)
  */
-static inline int rb_getc(struct ringbuf *rb, char *data)
-{
+static inline int rb_getc(struct ringbuf *rb, char *data) {
     if (!rb->len)
         return 0;
 
