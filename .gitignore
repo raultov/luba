@@ -11,3 +11,5 @@
 *.la
 *.a
 /Debug
+/.settings
+/.project

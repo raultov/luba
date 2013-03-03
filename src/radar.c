@@ -24,7 +24,7 @@ uint64_t delta = 0;
 xSemaphoreHandle xSemaphore = NULL;
 int32_t distance = -1;
 
-// 58 is the amount of microseconds spent by the sound wave to make 2 cm. The speed of sound used to determine this factor is 340 m/s
+// 58 is the amount of microseconds spent by the sound wave to go over 2 cm. The speed of sound used to determine this factor is 340 m/s
 uint64_t factorSoundSpeed = 58;
 
 

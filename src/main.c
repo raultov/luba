@@ -34,6 +34,7 @@
 
 #include "radar.h"
 #include "temperatureAndRH.h"
+#include "apc220.h"
 
 /** @addtogroup STM32F4_Discovery_Peripheral_Examples
   * @{
@@ -45,6 +46,7 @@ GPIO_InitTypeDef  GPIO_InitStructure;
 
 xTaskHandle radarHandle;
 xTaskHandle ledsHandle;
+xTaskHandle apc220Handle;
 
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -94,6 +96,8 @@ static void leds_task(void *pvParameters) {
 
 static void temperatureRH_task (void *pvParameters) {
 
+	char buf[15];
+
 	temperatureRH * values;
 	values = malloc (sizeof(struct TEMPERATURE_RH));
 
@@ -104,6 +108,7 @@ static void temperatureRH_task (void *pvParameters) {
 
 		vTaskSuspend(radarHandle);
 		vTaskSuspend(ledsHandle);
+		vTaskSuspend(apc220Handle);
 
 		uint8_t ret = read_values_temperatureRH(values);
 
@@ -111,8 +116,32 @@ static void temperatureRH_task (void *pvParameters) {
 			calculateSpeedSoundFactor(values->temperature, values->RH);
 		}
 
+		// Just we send via apc220 the values of temperature and relative humidity
+		sprintf(buf, "T: %d, H: %d\n", values->temperature, values->RH);
+		apc220_write_str(buf, 15);
+
+		vTaskResume(apc220Handle);
 		vTaskResume(ledsHandle);
 		vTaskResume(radarHandle);
+	}
+}
+/*
+#define RX_SIZE  128
+#define TX_SIZE  128
+static struct ringbuf tx_buffer = { .buf = (char[TX_SIZE]) {}, .bufsize = TX_SIZE };
+*/
+static void apc220_task(void *pvParameters) {
+
+	for ( ; ; ) {
+/*
+        char c;
+
+		if (rb_getc(&tx_buffer, &c)) {
+			while ( !(USART1->SR & 0x00000040) );
+			USART_SendData(USART1, c);
+		}
+*/
+		apc220_send_task();
 	}
 }
 
@@ -138,6 +167,16 @@ int main(void) {
 	// Enable GPIOA clock
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
 
+	/* enable APB2 peripheral clock for USART1
+	 * note that only USART1 and USART6 are connected to APB2
+	 * the other USARTs are connected to APB1
+	 */
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
+	/* enable the peripheral clock for the pins used by
+	 * USART1, PB6 for TX and PB7 for RX
+	 */
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+
 	initUsTimer();
 
 	// Configure PD12, PD13, PD14 and PD15 in output pushpull mode
@@ -157,6 +196,7 @@ int main(void) {
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
+	apc220_init(9600);
 	initRadar(GPIOD, GPIO_Pin_15, RCC_AHB1Periph_GPIOA, EXTI_PortSourceGPIOA, GPIOA, GPIO_Pin_0);
 	init_temperatureRH(GPIOA, GPIO_Pin_3);
 
@@ -167,15 +207,20 @@ int main(void) {
 	p->interval = 0xFFFFFF;
 	sprintf(p->name, "FPU_%d", 0x0FFFFF);
 
-
 	// Prueba con motor, mandamos un 1 por el pin PA7 y un 0 por el pin PA8
 	GPIO_SetBits(GPIOA, GPIO_Pin_7);
 	GPIO_ResetBits(GPIOA, GPIO_Pin_8);
 
+	//uart_write_r(NULL, 0, "stm32f4-discovery", 17);
+	//APC220Puts("stm32f4-discovery"); // just send a character to indicate that it works
+
+    apc220_write_str("stm32f4-discovery", 17);
 
 	xTaskCreate(radar_task, (int8_t*)p->name, 1024, NULL, tskIDLE_PRIORITY, &radarHandle);
 
 	xTaskCreate(leds_task, (int8_t*)p->name, 1024, p, tskIDLE_PRIORITY, &ledsHandle);
+
+	xTaskCreate(apc220_task, (int8_t*)p->name, 1024, NULL, tskIDLE_PRIORITY, &apc220Handle);
 
 	xTaskCreate(temperatureRH_task, (int8_t*)p->name, 1024, NULL, tskIDLE_PRIORITY, NULL);
 
