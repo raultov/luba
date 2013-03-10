@@ -30,8 +30,8 @@ static struct ringbuf rx_buf1 = { .buf = (char[RX_SIZE]) {}, .bufsize = RX_SIZE 
 static struct ringbuf rx_buf2 = { .buf = (char[RX_SIZE]) {}, .bufsize = RX_SIZE };
 static struct ringbuf tx_buf = { .buf = (char[TX_SIZE]) {}, .bufsize = TX_SIZE };
 
-static char buffer[RX_SIZE];
-static int buffer_index = 0;
+static char buffer_rx[RX_SIZE];
+static int buffer_rx_index = 0;
 
 static volatile struct uart_stats {
     uint32_t    rx_buff1_busy; // Amount of times rx_buff1 was busy and cause of that rx_buff2 has been used
@@ -233,7 +233,7 @@ ssize_t apc220_read_str(char *ptr) {
 
 			result = rb_getc(&rx_buf1, &c);
 			if (result != 0) {
-				buffer[buffer_index++] = c;
+				buffer_rx[buffer_rx_index++] = c;
 			}
 
 			xSemaphoreGive( xSemaphoreRx );
@@ -243,19 +243,19 @@ ssize_t apc220_read_str(char *ptr) {
 			result = rb_getc(&rx_buf2, &c);
 
 			if (result != 0) {
-				buffer[buffer_index++] = c;
+				buffer_rx[buffer_rx_index++] = c;
 			}
 		}
 	}
 
-	if ((buffer_index > 0) && (buffer[buffer_index-1] == '\0')) {
-		len = buffer_index-1;
+	if ((buffer_rx_index > 0) && (buffer_rx[buffer_rx_index-1] == '\0')) {
+		len = buffer_rx_index-1;
 
 		for (int i=0 ;i < len ; i++) {
-			ptr[i] = buffer[i];
+			ptr[i] = buffer_rx[i];
 		}
 
-		buffer_index = 0;
+		buffer_rx_index = 0;
 	}
 
     return len;

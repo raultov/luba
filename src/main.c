@@ -131,14 +131,7 @@ static void apc220_task(void *pvParameters) {
 	static int length = -1;
 
 	for ( ; ; ) {
-/*
-        char c;
 
-		if (rb_getc(&tx_buffer, &c)) {
-			while ( !(USART1->SR & 0x00000040) );
-			USART_SendData(USART1, c);
-		}
-*/
 		apc220_send_task();
 
 		length = apc220_read_str(received);
