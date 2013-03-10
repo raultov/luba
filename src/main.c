@@ -137,11 +137,6 @@ static void apc220_task(void *pvParameters) {
 		length = apc220_read_str(received);
 
 		if (length != -1) {
-			/*for (int i=0; i < length; i++) {
-				char c = received[i];
-
-
-			}*/
 			apc220_write_str(received, 22);
 		}
 	}
