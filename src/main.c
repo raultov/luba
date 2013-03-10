@@ -185,8 +185,8 @@ int main(void) {
 	GPIO_Init(GPIOD, &GPIO_InitStructure);
 
 
-	// Configure PD12, PD13, PD14 and PD15 in output pushpull mode
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8;
+	// Configure PA7, PA8, PA9 and PA10 in output pushpull mode
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
@@ -207,6 +207,10 @@ int main(void) {
 	// Prueba con motor, mandamos un 1 por el pin PA7 y un 0 por el pin PA8
 	GPIO_SetBits(GPIOA, GPIO_Pin_7);
 	GPIO_ResetBits(GPIOA, GPIO_Pin_8);
+
+	// Prueba con motor, mandamos un 1 por el pin PA9 y un 0 por el pin PA10
+	GPIO_SetBits(GPIOA, GPIO_Pin_9);
+	GPIO_ResetBits(GPIOA, GPIO_Pin_10);
 
 	//uart_write_r(NULL, 0, "stm32f4-discovery", 17);
 	//APC220Puts("stm32f4-discovery"); // just send a character to indicate that it works
