@@ -125,12 +125,10 @@ static void temperatureRH_task (void *pvParameters) {
 		vTaskResume(radarHandle);
 	}
 }
-/*
-#define RX_SIZE  128
-#define TX_SIZE  128
-static struct ringbuf tx_buffer = { .buf = (char[TX_SIZE]) {}, .bufsize = TX_SIZE };
-*/
+
 static void apc220_task(void *pvParameters) {
+	static char received [50];
+	static int length = -1;
 
 	for ( ; ; ) {
 /*
@@ -142,6 +140,17 @@ static void apc220_task(void *pvParameters) {
 		}
 */
 		apc220_send_task();
+
+		length = apc220_read_str(received);
+
+		if (length != -1) {
+			/*for (int i=0; i < length; i++) {
+				char c = received[i];
+
+
+			}*/
+			apc220_write_str(received, 22);
+		}
 	}
 }
 

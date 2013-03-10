@@ -1,0 +1,8 @@
+
+openocd -f ../openocd.cfg
+
+
+arm-none-eabi-gdb luba3
+target remote localhost:3333
+
+
