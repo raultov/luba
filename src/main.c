@@ -208,6 +208,10 @@ int main(void) {
 	GPIO_SetBits(GPIOA, GPIO_Pin_7);
 	GPIO_ResetBits(GPIOA, GPIO_Pin_8);
 
+	// Prueba con motor, mandamos un 1 por el pin PA9 y un 0 por el pin PA10
+	GPIO_SetBits(GPIOA, GPIO_Pin_9);
+	GPIO_ResetBits(GPIOA, GPIO_Pin_10);
+
 	//uart_write_r(NULL, 0, "stm32f4-discovery", 17);
 	//APC220Puts("stm32f4-discovery"); // just send a character to indicate that it works
 
