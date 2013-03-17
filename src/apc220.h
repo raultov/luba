@@ -19,7 +19,7 @@
 #include "task.h"
 #include "ringbuf.h"
 
-extern void  apc220_init(int baudrate);
+void  init_apc220(int baudrate);
 void apc220_send_task();
 ssize_t apc220_write_str(const void *ptr, size_t len);
 ssize_t apc220_read_str(char *ptr);

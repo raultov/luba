@@ -35,6 +35,7 @@
 #include "radar.h"
 #include "temperatureAndRH.h"
 #include "apc220.h"
+#include "moving.h"
 
 /** @addtogroup STM32F4_Discovery_Peripheral_Examples
   * @{
@@ -47,6 +48,9 @@ GPIO_InitTypeDef  GPIO_InitStructure;
 xTaskHandle radarHandle;
 xTaskHandle ledsHandle;
 xTaskHandle apc220Handle;
+xTaskHandle movingHandle;
+
+xQueueHandle movingQueue;
 
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -61,6 +65,14 @@ struct task_param {
 /* Private functions ---------------------------------------------------------*/
 
 static void radar_task(void *pvParameters) {
+	movingMsg obstacleMsg;
+	movingMsg freeObstacleMsg;
+
+	obstacleMsg.code = CODE_OBSTACLE_IN_FRONT;
+	obstacleMsg.origin = ORIGIN_RADAR;
+
+	freeObstacleMsg.code = 'N';
+	freeObstacleMsg.origin = ORIGIN_RADAR;
 
 	for ( ; ; ) {
 
@@ -69,10 +81,18 @@ static void radar_task(void *pvParameters) {
 		int32_t distance = getDistance();
 
 		if ((distance >= 10) && (distance < 20)) {
-			GPIO_SetBits(GPIOD, GPIO_Pin_13);
+			//GPIO_SetBits(GPIOD, GPIO_Pin_13);
+			xQueueSendToFront( movingQueue, ( void * ) &obstacleMsg, ( portTickType ) 10 );
 		} else {
-        	GPIO_ResetBits(GPIOD, GPIO_Pin_13);
+        	//GPIO_ResetBits(GPIOD, GPIO_Pin_13);
+			//xQueueSendToFront( movingQueue, ( void * ) &movingMessage, ( portTickType ) 10 );
+			xQueueSendToFront( movingQueue, ( void * ) &freeObstacleMsg, ( portTickType ) 10 );
         }
+/*
+		if (distance < 20) {
+			xQueueSendToFront( movingQueue, ( void * ) &movingMessage, ( portTickType ) 10 );
+		}
+		*/
 	}
 }
 
@@ -109,6 +129,7 @@ static void temperatureRH_task (void *pvParameters) {
 		vTaskSuspend(radarHandle);
 		vTaskSuspend(ledsHandle);
 		vTaskSuspend(apc220Handle);
+		vTaskSuspend(movingHandle);
 
 		uint8_t ret = read_values_temperatureRH(values);
 
@@ -120,6 +141,7 @@ static void temperatureRH_task (void *pvParameters) {
 		sprintf(buf, "T: %d, H: %d\n", values->temperature, values->RH);
 		apc220_write_str(buf, 15);
 
+		vTaskResume(movingHandle);
 		vTaskResume(apc220Handle);
 		vTaskResume(ledsHandle);
 		vTaskResume(radarHandle);
@@ -139,6 +161,13 @@ static void apc220_task(void *pvParameters) {
 		if (length != -1) {
 			apc220_write_str(received, 22);
 		}
+	}
+}
+
+static void moving_task(void *pvParameters) {
+
+	for ( ; ; ) {
+		moving_looping_task(movingQueue);
 	}
 }
 
@@ -184,18 +213,12 @@ int main(void) {
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOD, &GPIO_InitStructure);
 
-
-	// Configure PA7, PA8, PA9 and PA10 in output pushpull mode
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-	apc220_init(9600);
-	initRadar(GPIOD, GPIO_Pin_15, RCC_AHB1Periph_GPIOA, EXTI_PortSourceGPIOA, GPIOA, GPIO_Pin_0);
+	init_apc220(9600);
+	init_radar(GPIOD, GPIO_Pin_15, RCC_AHB1Periph_GPIOA, EXTI_PortSourceGPIOA, GPIOA, GPIO_Pin_0);
 	init_temperatureRH(GPIOA, GPIO_Pin_3);
+	init_moving(GPIOA, GPIO_Pin_7, GPIO_Pin_8, GPIO_Pin_9, GPIO_Pin_10);
+
+	movingQueue = xQueueCreate( 10, sizeof( movingMsg ) );
 
 	struct task_param *p;
 
@@ -203,14 +226,6 @@ int main(void) {
 	p->name = malloc(16);
 	p->interval = 0xFFFFFF;
 	sprintf(p->name, "FPU_%d", 0x0FFFFF);
-
-	// Prueba con motor, mandamos un 1 por el pin PA7 y un 0 por el pin PA8
-	GPIO_SetBits(GPIOA, GPIO_Pin_7);
-	GPIO_ResetBits(GPIOA, GPIO_Pin_8);
-
-	// Prueba con motor, mandamos un 1 por el pin PA9 y un 0 por el pin PA10
-	GPIO_SetBits(GPIOA, GPIO_Pin_9);
-	GPIO_ResetBits(GPIOA, GPIO_Pin_10);
 
 	//uart_write_r(NULL, 0, "stm32f4-discovery", 17);
 	//APC220Puts("stm32f4-discovery"); // just send a character to indicate that it works
@@ -222,6 +237,8 @@ int main(void) {
 	xTaskCreate(leds_task, (int8_t*)p->name, 1024, p, tskIDLE_PRIORITY, &ledsHandle);
 
 	xTaskCreate(apc220_task, (int8_t*)p->name, 1024, NULL, tskIDLE_PRIORITY, &apc220Handle);
+
+	xTaskCreate(moving_task, (int8_t*)p->name, 1024, NULL, tskIDLE_PRIORITY, &movingHandle);
 
 	xTaskCreate(temperatureRH_task, (int8_t*)p->name, 1024, NULL, tskIDLE_PRIORITY, NULL);
 

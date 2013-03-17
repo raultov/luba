@@ -107,7 +107,7 @@ void apc220_poll_send(const char *ch)
  *  PB7   USART1_RXD
  *
  */
-void apc220_init(int baudrate)
+void init_apc220(int baudrate)
 {
 	GPIO_InitTypeDef GPIO_InitStruct; // this is for the GPIO pins used as TX and RX
 	USART_InitTypeDef USART_InitStruct; // this is for the USART1 initilization

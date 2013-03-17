@@ -13,7 +13,6 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
-#include "queue.h"
 #include "ansi.h"
 #include "ustime.h"
 
@@ -21,7 +20,7 @@
 #define LONG_TIME 0xffff
 #define TICKS_TO_WAIT    10
 
-void initRadar(GPIO_TypeDef* GPIOx_trigger, uint16_t GPIO_Pin_trigger, uint32_t RCC_AHB1Periph, uint8_t EXTI_PortSourceGPIOx, GPIO_TypeDef* GPIOx_echo, uint16_t GPIO_Pin_echo);
+void init_radar(GPIO_TypeDef* GPIOx_trigger, uint16_t GPIO_Pin_trigger, uint32_t RCC_AHB1Periph, uint8_t EXTI_PortSourceGPIOx, GPIO_TypeDef* GPIOx_echo, uint16_t GPIO_Pin_echo);
 
 void trigger(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
 
