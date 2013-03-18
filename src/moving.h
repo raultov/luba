@@ -28,6 +28,6 @@ typedef struct {
 
 void init_moving(GPIO_TypeDef * GPIOx, uint16_t GPIO_Pin_Left1, uint16_t GPIO_Pin_Left2, uint16_t GPIO_Pin_Right1, uint16_t GPIO_Pin_Right2);
 
-void moving_looping_task(xQueueHandle movingQueue);
+void moving_looping_task(xQueueHandle * movingQueue);
 
 #endif /* MOVING_H_ */

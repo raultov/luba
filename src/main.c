@@ -82,11 +82,11 @@ static void radar_task(void *pvParameters) {
 
 		if ((distance >= 10) && (distance < 20)) {
 			//GPIO_SetBits(GPIOD, GPIO_Pin_13);
-			xQueueSendToFront( movingQueue, ( void * ) &obstacleMsg, ( portTickType ) 10 );
+			xQueueSendToBack( movingQueue, ( void * ) &obstacleMsg, ( portTickType ) 0 );
 		} else {
         	//GPIO_ResetBits(GPIOD, GPIO_Pin_13);
 			//xQueueSendToFront( movingQueue, ( void * ) &movingMessage, ( portTickType ) 10 );
-			xQueueSendToFront( movingQueue, ( void * ) &freeObstacleMsg, ( portTickType ) 10 );
+			xQueueSendToBack( movingQueue, ( void * ) &freeObstacleMsg, ( portTickType ) 0 );
         }
 /*
 		if (distance < 20) {
@@ -167,7 +167,7 @@ static void apc220_task(void *pvParameters) {
 static void moving_task(void *pvParameters) {
 
 	for ( ; ; ) {
-		moving_looping_task(movingQueue);
+		moving_looping_task(&movingQueue);
 	}
 }
 
@@ -218,7 +218,7 @@ int main(void) {
 	init_temperatureRH(GPIOA, GPIO_Pin_3);
 	init_moving(GPIOA, GPIO_Pin_7, GPIO_Pin_8, GPIO_Pin_9, GPIO_Pin_10);
 
-	movingQueue = xQueueCreate( 10, sizeof( movingMsg ) );
+	movingQueue = xQueueCreate( 1, sizeof( movingMsg ) );
 
 	struct task_param *p;
 

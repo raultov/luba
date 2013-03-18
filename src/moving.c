@@ -82,9 +82,9 @@ void moving_go_back() {
  * @param  radarHandle the radar task handle
  *
  */
-void moving_looping_task(xQueueHandle movingQueue) {
+void moving_looping_task(xQueueHandle * movingQueue) {
 
-    if( xQueueReceive( movingQueue, &( movingMsgRcv ), ( portTickType ) 0 ) ) {
+    if( xQueueReceive( *movingQueue, &( movingMsgRcv ), ( portTickType ) 0 ) ) {
 
     	switch (movingMsgRcv.code) {
     		case CODE_OBSTACLE_IN_FRONT:
