@@ -183,9 +183,7 @@ static void moving_task(void *pvParameters) {
 	    			//GPIO_ResetBits(GPIOD, GPIO_Pin_13);
 	    			break;
 	    	}
-
 	    }
-
 	}
 }
 
