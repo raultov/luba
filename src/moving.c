@@ -20,7 +20,7 @@ uint16_t GPIO_Pin_R1;
 uint16_t GPIO_Pin_R2;
 GPIO_InitTypeDef  GPIO_InitStructure_Moving;
 
-movingMsg movingMsgRcv;
+//static movingMsg movingMsgRcv;
 
 /**
  * @brief This function initializes the resources associated to the moving of wheels
@@ -75,41 +75,7 @@ void moving_go_back() {
 	GPIO_SetBits(GPIOx_Moving, GPIO_Pin_R1);
 }
 
-/**
- * @brief This function receives messages from other tasks and then acts accordingly
- * @note the function moving_init must be called previously
- *
- * @param  radarHandle the radar task handle
- *
- */
-void moving_looping_task(xQueueHandle movingQueue) {
 
-    if( xQueueReceive( movingQueue, &( movingMsgRcv ), ( portTickType ) 0 ) ) {
-
-    	switch (movingMsgRcv.code) {
-    		case CODE_OBSTACLE_IN_FRONT:
-    			//moving_turn_left();
-    			GPIO_SetBits(GPIOD, GPIO_Pin_13);
-    			moving_turn_left();
-    			break;
-
-    		case 'N':
-    			GPIO_ResetBits(GPIOD, GPIO_Pin_13);
-    			moving_go_forward();
-    			break;
-
-    		default:
-    			//moving_go_forward();
-    			//GPIO_ResetBits(GPIOD, GPIO_Pin_13);
-    			break;
-    	}
-
-    } else {
-    	//moving_go_forward();
-    	//GPIO_ResetBits(GPIOD, GPIO_Pin_13);
-    	//moving_go_forward();
-    }
-}
 
 
 

@@ -67,6 +67,7 @@ struct task_param {
 static void radar_task(void *pvParameters) {
 	movingMsg obstacleMsg;
 	movingMsg freeObstacleMsg;
+	movingMsg * msgSend;
 
 	obstacleMsg.code = CODE_OBSTACLE_IN_FRONT;
 	obstacleMsg.origin = ORIGIN_RADAR;
@@ -81,18 +82,13 @@ static void radar_task(void *pvParameters) {
 		int32_t distance = getDistance();
 
 		if ((distance >= 10) && (distance < 20)) {
-			//GPIO_SetBits(GPIOD, GPIO_Pin_13);
-			xQueueSendToFront( movingQueue, ( void * ) &obstacleMsg, ( portTickType ) 10 );
+			msgSend = &obstacleMsg;
 		} else {
-        	//GPIO_ResetBits(GPIOD, GPIO_Pin_13);
-			//xQueueSendToFront( movingQueue, ( void * ) &movingMessage, ( portTickType ) 10 );
-			xQueueSendToFront( movingQueue, ( void * ) &freeObstacleMsg, ( portTickType ) 10 );
+			msgSend = &freeObstacleMsg;
         }
-/*
-		if (distance < 20) {
-			xQueueSendToFront( movingQueue, ( void * ) &movingMessage, ( portTickType ) 10 );
-		}
-		*/
+
+		xQueueSend( movingQueue, ( void * ) &msgSend, ( portTickType ) 0 );
+
 	}
 }
 
@@ -137,7 +133,7 @@ static void temperatureRH_task (void *pvParameters) {
 			calculateSpeedSoundFactor(values->temperature, values->RH);
 		}
 
-		// Just we send via apc220 the values of temperature and relative humidity
+		// Just send values of temperature and relative humidity via apc220
 		sprintf(buf, "T: %d, H: %d\n", values->temperature, values->RH);
 		apc220_write_str(buf, 15);
 
@@ -165,9 +161,31 @@ static void apc220_task(void *pvParameters) {
 }
 
 static void moving_task(void *pvParameters) {
+	movingMsg *movingMsgRcv;
 
 	for ( ; ; ) {
-		moving_looping_task(movingQueue);
+
+	    if( xQueueReceive( movingQueue, &( movingMsgRcv ), ( portTickType ) 10 ) ) {
+
+	    	switch (movingMsgRcv->code) {
+	    		case CODE_OBSTACLE_IN_FRONT:
+	    			GPIO_SetBits(GPIOD, GPIO_Pin_13);
+	    			moving_turn_left();
+	    			break;
+
+	    		case 'N':
+	    			GPIO_ResetBits(GPIOD, GPIO_Pin_13);
+	    			moving_go_forward();
+	    			break;
+
+	    		default:
+	    			//moving_go_forward();
+	    			//GPIO_ResetBits(GPIOD, GPIO_Pin_13);
+	    			break;
+	    	}
+
+	    }
+
 	}
 }
 
@@ -218,7 +236,7 @@ int main(void) {
 	init_temperatureRH(GPIOA, GPIO_Pin_3);
 	init_moving(GPIOA, GPIO_Pin_7, GPIO_Pin_8, GPIO_Pin_9, GPIO_Pin_10);
 
-	movingQueue = xQueueCreate( 10, sizeof( movingMsg ) );
+	movingQueue = xQueueCreate( 5, sizeof( movingMsg * ) );
 
 	struct task_param *p;
 
